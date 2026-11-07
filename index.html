@@ -1,0 +1,978 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#0b1020">
+  <meta name="description" content="Target: Syrnik — цели, E-баллы, таймеры и магазин наград.">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Target: Syrnik 1.1(Beta)">
+  <link rel="manifest" href="./manifest.webmanifest">
+  <link rel="icon" type="image/png" sizes="192x192" href="./icons/icon-192.png">
+  <link rel="apple-touch-icon" href="./icons/icon-192.png">
+  <title>Target: Syrnik 1.1(Beta) — мои цели</title>
+  <style>
+    :root {
+      color-scheme: dark;
+      --base: #090d19; --panel: #111827; --panel-2: #171f31;
+      --border: rgba(194,208,245,.11); --white:#f5f7ff; --muted:#8e9bb5;
+      --purple:#9b83ff; --purple2:#7868ee; --mint:#5be0bd; --red:#ff8a98;
+      --ring:0 0 0 3px rgba(157,131,255,.29);
+    }
+    *,*::before,*::after{box-sizing:border-box}
+    [hidden]{display:none!important}
+    html{min-height:100%;-webkit-text-size-adjust:100%;scrollbar-color:#39435d #0b1020}
+    body{min-height:100vh; min-height:100dvh; margin:0; font-family:Inter,ui-sans-serif,-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif; color:var(--white); background:radial-gradient(ellipse 430px 390px at 18% 10%,rgba(98,77,180,.17),transparent 75%),radial-gradient(ellipse 430px 390px at 85% 90%,rgba(38,130,134,.11),transparent 76%),#080c18; display:flex;align-items:flex-start;justify-content:center;padding:42px 18px 56px}
+    button,input,select{font:inherit}button{cursor:pointer;touch-action:manipulation;-webkit-tap-highlight-color:transparent}button:disabled{opacity:.55;cursor:default}
+    button:focus-visible,input:focus-visible,select:focus-visible,summary:focus-visible{outline:none;box-shadow:var(--ring)}
+    .app{width:100%;max-width:570px;position:relative}
+    .shell{background:linear-gradient(160deg,rgba(20,28,46,.95),rgba(12,17,30,.97));border:1px solid rgba(189,196,236,.16);border-radius:30px;box-shadow:0 28px 90px rgba(0,0,0,.4),inset 0 1px 0 rgba(255,255,255,.04);overflow:hidden}
+    .top{padding:26px 29px 0}.topline{display:flex;align-items:center;justify-content:space-between;gap:12px}.brand{display:flex;align-items:center;gap:13px}.brand-icon{width:43px;height:43px;display:grid;place-items:center;background:linear-gradient(135deg,#b7a4ff,#7d71f2);border-radius:14px;color:#17152b;box-shadow:0 7px 22px rgba(134,114,244,.22)}.eyebrow{font-size:10px;letter-spacing:2.7px;font-weight:800;color:var(--purple);line-height:1.25;margin-bottom:4px}.brand h1{font-size:22px;line-height:1.1;letter-spacing:-.65px;margin:0;font-weight:780}.header-actions{display:flex;gap:8px;align-items:center}.icon-btn{width:37px;height:37px;display:inline-grid;place-items:center;background:#20283b;color:#b2bdd4;border:1px solid var(--border);border-radius:12px;transition:background .2s,color .2s}.icon-btn:hover{background:#2d3650;color:#fff}.icon-btn.active{color:#c8bbff;background:#322a57;border-color:#54458e}
+    .headline{font-size:25px;font-weight:770;letter-spacing:-.8px;margin:22px 0 20px}.headline em{font-style:normal;color:#b6a6ff}
+    .summary{display:flex;gap:14px;align-items:center;background:linear-gradient(113deg,rgba(112,91,200,.17),rgba(63,71,108,.15));border:1px solid rgba(159,136,251,.2);border-radius:20px;padding:17px 19px}.summary-icon{width:48px;height:48px;display:grid;place-items:center;border-radius:15px;background:#262345;color:#b6a7ff;flex:0 0 auto}.summary-main{flex:1;min-width:0}.summary-top{display:flex;justify-content:space-between;align-items:baseline;gap:5px}.summary-title{font-size:13px;font-weight:700}.summary-num{font-size:18px;font-weight:790;font-variant-numeric:tabular-nums}.summary-detail{font-size:11px;color:var(--muted);margin:4px 0 12px}.progress{height:7px;border-radius:100px;background:#2c334c;overflow:hidden}.progress-inner{width:0;height:100%;border-radius:inherit;background:linear-gradient(90deg,#9c84ff,#6ce1c0);transition:width .3s ease}
+    .new-goal{margin:23px 29px 0;padding:17px;background:rgba(255,255,255,.025);border:1px solid var(--border);border-radius:19px}.small-heading{font-size:13px;font-weight:760;margin:0 0 12px;color:#d9def1}.add-row{display:flex;gap:9px}.goal-input{min-width:0;flex:1;background:#0c1424;color:#fff;border:1px solid #343b53;border-radius:12px;padding:12px 13px;outline:none;font-size:14px}.goal-input::placeholder{color:#67748e}.goal-input:focus{border-color:#9180e8;box-shadow:var(--ring)}.add-btn{border:0;background:linear-gradient(135deg,#aa91ff,#8673f1);color:#120f22;padding:0 16px;border-radius:12px;display:flex;align-items:center;gap:6px;font-size:13px;font-weight:800;white-space:nowrap}.add-btn:hover{filter:brightness(1.08)}
+.add-error{margin:9px 0 0;padding:8px 10px;border:1px solid rgba(255,138,152,.45);border-radius:10px;background:rgba(255,138,152,.08);font-size:12px;line-height:1.4;color:#ffc0c9}.goal-input[aria-invalid="true"],.points-custom input[aria-invalid="true"]{border-color:#ff8a98;box-shadow:0 0 0 2px rgba(255,138,152,.13)}
+        .kind-controls{display:flex;gap:8px;margin-top:12px}.kind-option{flex:1;position:relative;cursor:pointer}.kind-option input{position:absolute;opacity:0;width:1px;height:1px}.kind-option span{display:flex;align-items:center;justify-content:center;gap:7px;padding:9px 8px;border:1px solid #30394f;border-radius:10px;font-size:12px;font-weight:650;color:#a8b1c6;transition:all .2s}.kind-option input:checked+span{background:rgba(147,123,246,.14);border-color:rgba(171,148,255,.65);color:#cabfff}.kind-option.optional input:checked+span{background:rgba(90,211,176,.08);border-color:rgba(90,211,176,.55);color:#8deacc}.kind-option input:focus-visible+span{box-shadow:var(--ring)}.mark{display:inline-block;width:7px;height:7px;border-radius:50%;background:currentColor}
+    .sections{padding:24px 29px 4px}.tabs{display:flex;gap:5px;padding:4px;border:1px solid var(--border);border-radius:12px;background:#0d1423;margin-bottom:24px}.tab{border:0;background:transparent;color:#8f9bb1;padding:10px 7px;font-size:12px;font-weight:700;border-radius:9px;flex:1}.tab[aria-selected="true"]{background:#252f44;color:#f4f5ff;box-shadow:0 3px 10px rgba(0,0,0,.16)}
+    .group{margin-bottom:24px}.group-title{display:flex;align-items:center;gap:9px;margin-bottom:12px}.group-title h2{margin:0;font-size:14px;font-weight:760}.group-icon{width:28px;height:28px;border-radius:9px;display:grid;place-items:center;background:rgba(166,142,255,.13);color:#b7a6ff}.group.optional .group-icon{background:rgba(87,219,176,.12);color:#6fdfbd}.count{font-size:11px;background:#253048;color:#99a8c4;padding:3px 8px;border-radius:8px;margin-left:auto;white-space:nowrap}.task-list{display:flex;flex-direction:column;gap:8px}.task{display:flex;gap:12px;align-items:center;min-height:58px;background:#151e30;border:1px solid #2a3449;border-radius:13px;padding:10px 11px 10px 13px;transition:border-color .2s}.task:hover{border-color:#46516b}.check{display:grid;place-items:center;width:25px;height:25px;background:transparent;border:2px solid #68738e;border-radius:8px;flex:0 0 auto;color:transparent;padding:0}.check svg{opacity:0}.task.done .check{background:#6cd8b9;border-color:#6cd8b9;color:#112725}.task.done .check svg{opacity:1}.task.done .task-name{text-decoration:line-through;color:#7986a1}.task-name{flex:1;min-width:0;overflow-wrap:anywhere;font-size:13px;font-weight:600;line-height:1.45}.task-actions{display:flex;align-items:center;gap:2px}.item-btn{border:0;background:transparent;color:#8390ab;display:grid;place-items:center;width:30px;height:34px;border-radius:8px;padding:0}.item-btn:hover{background:#2b354a;color:#fff}.item-btn.danger:hover{background:rgba(255,138,152,.12);color:var(--red)}.empty{padding:21px 12px;text-align:center;border:1px dashed #30394f;border-radius:14px;color:#8390aa;font-size:12px;line-height:1.6;background:rgba(255,255,255,.01)}.empty strong{display:block;color:#adb9d0;font-size:13px;margin-bottom:3px}
+    .task.just-added{animation:goalAdded .95s ease-out;scroll-margin:22vh}
+    @keyframes goalAdded{0%{border-color:#9b83ff;box-shadow:0 0 0 4px rgba(155,131,255,.27)}100%{border-color:#2a3449;box-shadow:none}}
+    .add-success{margin:9px 0 0;font-size:12px;line-height:1.5;color:#83e5c3}
+    .edit-form{flex:1;min-width:0;display:flex;flex-direction:column;gap:8px}.edit-form input{width:100%;background:#0c1424;color:#f9f9ff;border:1px solid #7766c4;border-radius:9px;min-height:34px;padding:7px 9px;font-size:13px}.edit-bottom{display:flex;gap:6px;align-items:center;flex-wrap:wrap}.edit-bottom select{font-size:12px;min-height:30px;color:#d6d9ee;border:1px solid #38425b;background:#21293e;border-radius:8px;padding:4px 6px;max-width:170px}.edit-bottom button{border:1px solid #434b67;color:#c7cbe5;background:#263149;border-radius:8px;font-size:11px;min-height:30px;padding:5px 9px;font-weight:700}.edit-bottom .save{background:#9e88ff;color:#131026;border-color:#9e88ff}.edit-bottom .cancel{margin-left:0}
+    .footer{padding:15px 29px 21px;border-top:1px solid rgba(196,207,243,.08);display:flex;justify-content:space-between;align-items:center;gap:12px;color:#72809a;font-size:11px}.footer p{margin:0}.footer strong{color:#abbbd7}.menu{position:relative}.menu summary{list-style:none;display:flex;align-items:center;gap:5px;cursor:pointer;color:#a7b4cc;padding:5px;border-radius:8px;font-weight:700}.menu summary::-webkit-details-marker{display:none}.menu[open] summary{color:#dedbff}.menu-pop{position:absolute;z-index:5;bottom:33px;right:0;min-width:185px;padding:6px;border-radius:12px;border:1px solid #3b4560;background:#20293e;box-shadow:0 17px 38px rgba(0,0,0,.38)}.menu-pop button{border:0;background:none;display:flex;align-items:center;gap:9px;color:#d2d9ee;font-size:12px;text-align:left;padding:10px;border-radius:8px;width:100%}.menu-pop button:hover{background:#343e59}.menu-pop button.danger{color:#ffa3af}
+    .toast{position:fixed;z-index:20;bottom:22px;left:50%;transform:translateX(-50%) translateY(12px);font-size:13px;padding:11px 18px;border:1px solid #536084;border-radius:12px;color:#f7f7ff;background:#263047;box-shadow:0 12px 35px rgba(0,0,0,.4);opacity:0;pointer-events:none;transition:opacity .2s,transform .2s;white-space:nowrap;max-width:calc(100vw - 28px);text-overflow:ellipsis;overflow:hidden}.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}.sr-only{position:absolute!important;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+    .compact .headline,.compact .summary-icon,.compact .summary-detail{display:none}.compact .top{padding-top:20px}.compact .summary{margin-top:18px;padding:12px 15px}.compact .new-goal{margin-top:15px}.compact .sections{padding-top:17px}.compact .tabs{margin-bottom:18px}.compact .group{margin-bottom:17px}.compact .task{min-height:47px;padding-block:6px}.compact .footer{padding-block:11px}
+    @media(max-width:600px){body{padding:0;display:block;background:var(--base)}.app{max-width:none}.shell{min-height:100dvh;border:0;border-radius:0;box-shadow:none}.top{padding:24px 18px 0}.headline{font-size:24px}.new-goal{margin:21px 18px 0;padding:14px}.sections{padding:21px 18px 4px}.footer{padding:17px 18px 23px}.task{min-height:61px}.icon-btn{width:38px;height:38px}.compact .top{padding-top:18px}}
+    @media(max-width:400px){.brand h1{font-size:19px}.topline{gap:6px}.header-actions{gap:5px}}
+    @media(max-width:360px){.add-btn{padding:0 11px}.add-btn .add-label{display:none}.kind-option span{font-size:11px;padding-inline:4px}.brand{gap:8px}.brand h1{font-size:18px}.topline{gap:4px}.header-actions{gap:4px}}
+    @media(prefers-reduced-motion:reduce){*,*::before,*::after{transition:none!important}}
+
+    /* E-баллы — кошелёк и отдельная панель цены */
+    .tab{min-width:0;white-space:normal;line-height:1.25}
+    .wallet{margin-top:14px;border-radius:19px;padding:16px 17px;background:linear-gradient(122deg,rgba(33,71,88,.48),rgba(29,47,71,.75));border:1px solid rgba(95,224,190,.25)}
+    .wallet-head{display:flex;align-items:center;gap:12px}.wallet-symbol{width:46px;height:46px;display:grid;place-items:center;flex:none;border-radius:14px;background:linear-gradient(145deg,#83f0cc,#48bfa5);color:#0d2924;font-size:24px;font-weight:900;box-shadow:0 6px 25px rgba(53,197,149,.13)}
+    .wallet-info{flex:1;min-width:0}.wallet-label{color:#96cbbb;font-size:10px;letter-spacing:1.9px;font-weight:850}.wallet-balance{font-size:27px;font-weight:820;line-height:1.22;letter-spacing:-.7px;overflow-wrap:anywhere;font-variant-numeric:tabular-nums}
+    .wallet-history{background:rgba(255,255,255,.07);border:1px solid rgba(173,245,213,.18);border-radius:10px;color:#dafff0;font-size:12px;font-weight:750;padding:9px 11px}.wallet-history:hover{background:rgba(255,255,255,.13)}
+    .wallet-stats{display:flex;flex-wrap:wrap;gap:7px;margin-top:13px}.wallet-stat{color:#b3c3d5;font-size:11px;border-radius:9px;border:1px solid rgba(176,218,220,.11);padding:7px 9px;background:rgba(0,0,0,.13)}.wallet-stat b{font-variant-numeric:tabular-nums}.pos{color:#77e5bd!important}.neg{color:#ff9da9!important}.muted{color:var(--muted)}
+    .points-frame{margin-top:14px;padding:13px;border:1px solid rgba(163,148,249,.24);border-radius:13px;background:linear-gradient(110deg,rgba(130,100,213,.10),rgba(54,66,98,.09))}
+    .points-frame-head{display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:10px}.points-heading{color:#e5defe;font-size:12px;font-weight:800;margin:0}.points-current{color:#9ae9cd;font-size:11px;font-weight:800}
+    .points-choices{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:6px}.points-choice{min-width:0;border:1px solid #3d4561;color:#b9c5e0;background:#1b2539;padding:9px 3px;border-radius:9px;font-size:12px;font-weight:800}.points-choice[aria-pressed="true"]{background:rgba(137,118,242,.23);color:#e5dcff;border-color:#a28dfb}.points-choice:hover{border-color:#a08cf2}
+    .points-custom{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:10px}.points-custom label{font-size:11px;color:#a7b4c9}.points-custom input{background:#0d1627;color:#f2f8ff;border:1px solid #404c6c;border-radius:9px;width:106px;min-width:0;padding:9px 11px;font-weight:800;font-variant-numeric:tabular-nums;text-align:right}.points-custom input:focus{outline:none;border-color:#9b83ff;box-shadow:var(--ring)}
+    .points-help{font-size:10px;color:#8293b1;line-height:1.45;margin:8px 0 0}
+    .task{align-items:stretch}.task-content{flex:1;min-width:0}.task-top{display:flex;align-items:center;justify-content:space-between;gap:10px}.task-name{flex:1}.task-price{flex:none;border-radius:8px;background:#24324b;color:#c8d4f5;border:1px solid rgba(143,164,226,.17);padding:5px 7px;font-size:10px;font-weight:800;white-space:nowrap;font-variant-numeric:tabular-nums}
+    .task-bottom{display:flex;gap:8px;align-items:center;justify-content:space-between;margin-top:9px;flex-wrap:wrap}.status-actions{display:flex;gap:5px;align-items:center;flex-wrap:wrap}.status-btn{border:1px solid #3a485b;border-radius:8px;background:#202b3e;color:#bdc9de;padding:6px 9px;font-size:11px;font-weight:740;min-height:31px}.status-btn:hover{background:#2b3850}.status-btn.success[aria-pressed="true"]{background:rgba(85,224,176,.15);border-color:#58bb9b;color:#83efc8}.status-btn.fail[aria-pressed="true"]{background:rgba(252,135,156,.14);border-color:#c27683;color:#ffc0c9}.status-btn.reset{padding-inline:8px}
+    .task.done{border-color:rgba(91,224,189,.27)}.task.failed{border-color:rgba(255,138,152,.33);background:linear-gradient(110deg,#241e2b,#171e31)}.task.failed .task-name{color:#b6a6b2}.task-state{font-size:10px;font-weight:750;margin-top:4px}.task.done .task-state{color:#75dcb9}.task.failed .task-state{color:#ff9eaa}
+    .task-actions{margin-left:auto}.task-actions .item-btn{width:27px;height:30px}.task-actions .points-edit{color:#9ae1ca}.task-actions .points-edit:hover{color:#b4ffe0}
+    .modal{position:fixed;inset:0;margin:auto;width:min(94vw,440px);max-height:min(86vh,760px);overflow-y:auto;background:#151d2e;border:1px solid #48536f;border-radius:21px;color:#f6f7ff;box-shadow:0 28px 105px rgba(0,0,0,.68);padding:22px}.modal::backdrop{background:rgba(3,7,17,.76);backdrop-filter:blur(5px)}.modal h2{font-size:19px;letter-spacing:-.4px;margin:0 0 5px}.modal .subtitle{font-size:12px;color:#a5b0c7;margin:0 0 17px;line-height:1.55;overflow-wrap:anywhere}.modal .points-frame{margin-top:0}.modal-actions{display:flex;justify-content:flex-end;gap:8px;margin-top:17px}.modal-actions button{border-radius:10px;border:1px solid #43516b;background:#28354b;color:#e8eafa;padding:10px 13px;font-size:12px;font-weight:800}.modal-actions button.primary{background:linear-gradient(120deg,#af99ff,#8b79ec);border-color:#9686ec;color:#170f2d}
+    .history-list{display:flex;flex-direction:column;gap:7px;margin:15px 0 0;max-height:440px;overflow-y:auto}.history-entry{display:flex;align-items:center;gap:8px;justify-content:space-between;padding:11px;background:#1e283b;border:1px solid #333e56;border-radius:11px}.history-entry-info{min-width:0}.history-entry-title{font-size:12px;font-weight:800;overflow-wrap:anywhere}.history-entry-time{font-size:10px;color:#8999b5;margin-top:4px}.history-entry-amount{font-size:14px;font-weight:850;white-space:nowrap;font-variant-numeric:tabular-nums}.history-empty{font-size:13px;color:var(--muted);text-align:center;padding:26px 8px}
+    .compact .wallet{margin-top:12px;padding:12px 13px}.compact .wallet-symbol{width:36px;height:36px;font-size:20px}.compact .wallet-balance{font-size:23px}.compact .wallet-stats{margin-top:9px}.compact .points-frame{padding:10px}.compact .task-bottom{margin-top:6px}
+    @media(max-width:430px){.wallet-balance{font-size:24px}.wallet-history{padding:8px;font-size:11px}.wallet{padding:13px}.task{padding:10px}.task-bottom{gap:4px}.status-btn{padding-inline:7px}.task-actions .item-btn{width:27px}.points-choices{gap:4px}.points-choice{padding-inline:0}.modal{padding:18px}}
+    @media(max-width:350px){.task-price{font-size:9px;padding-inline:5px}.status-btn{font-size:10px;padding-inline:5px}.points-current{font-size:10px}.wallet-label{letter-spacing:1px}}
+    /* Target: Syrnik 1.1(Beta): отсчёт, окончательные статусы и надёжные диалоги */
+    .timer-frame{margin-top:12px;padding:14px;border:1px solid rgba(114,191,233,.27);border-radius:13px;background:linear-gradient(115deg,rgba(57,116,151,.12),rgba(37,54,83,.11))}
+    .timer-frame-title{display:flex;align-items:center;gap:8px;color:#c7e5ff;margin-bottom:10px}
+    .timer-frame-title h2{font-size:12px;font-weight:800;margin:0}.timer-optional{margin-left:auto;font-size:10px;color:#8ca7bd}
+    .timer-label,.field-label{display:block;font-size:11px;color:#a7b9d2;margin:11px 0 7px;font-weight:700}
+    .timer-select,.dialog-input{width:100%;padding:10px 12px;background:#0c1424;border:1px solid #42516c;color:#f2f6ff;border-radius:10px;min-height:40px;font-size:13px}
+    .timer-help{color:#8ba3bc;font-size:11px;line-height:1.55;margin:9px 0 0}
+    .task-timer{display:flex;align-items:center;gap:6px;font-size:11px;line-height:1.35;margin-top:8px;color:#9ccae4;font-weight:700;font-variant-numeric:tabular-nums}
+    .task-timer.urgent{color:#ffbb86}.task-timer.completed{color:#7e9ab1;font-weight:500}
+    .task-created{font-size:10px;line-height:1.45;color:#8999b4;margin-top:6px;font-variant-numeric:tabular-nums;overflow-wrap:anywhere}
+    .final-tag{display:inline-flex;align-items:center;padding:6px 9px;border-radius:8px;font-size:11px;font-weight:750;border:1px solid #42546d;background:#1c2d42;color:#bac8dd}
+    .task.done .final-tag{border-color:rgba(91,224,189,.3);color:#81e2c3;background:rgba(91,224,189,.07)}
+    .task.failed .final-tag{border-color:rgba(255,138,152,.28);color:#ffa7b4;background:rgba(255,138,152,.07)}
+    .task-actions .item-btn{width:36px;height:36px;min-width:36px;touch-action:manipulation;position:relative;z-index:1}
+    .task-actions{display:flex;gap:4px;align-items:center;flex-wrap:nowrap}
+    .task-bottom{gap:10px}
+    .locked-note{border:1px solid #41526b;background:#202d41;color:#acbfd9;padding:11px 12px;border-radius:11px;font-size:12px;line-height:1.5}
+    .dialog-error{color:#ffc0c9;font-size:12px;margin:9px 0 0}
+    .modal-actions .danger-confirm{background:#85394b;color:#fff0f1;border-color:#a34e64}
+    @media(max-width:380px){.status-actions{gap:3px}.final-tag{font-size:10px;padding:5px 6px}.task-actions .item-btn{width:34px;min-width:34px}}
+
+    /* Вторая страница — магазин наград */
+    .primary-nav{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin:20px 0 0;padding:5px;border:1px solid #313c58;border-radius:15px;background:#0e1627}
+    .nav-btn{display:flex;justify-content:center;align-items:center;gap:9px;min-height:43px;border-radius:11px;background:transparent;color:#9fabc7;border:1px solid transparent;font-weight:800;font-size:13px;transition:background .15s,color .15s}
+    .nav-btn[aria-selected="true"]{background:#293451;color:#f1ebff;border-color:#455275;box-shadow:0 5px 17px rgba(0,0,0,.18)}
+    .nav-btn svg{width:17px;height:17px;flex:none}
+    .shop-page{padding:0 29px 26px}
+    .shop-intro{padding-top:24px}.shop-intro h2{font-size:24px;line-height:1.2;letter-spacing:-.7px;margin:0 0 8px}.shop-intro h2 span{color:#b9aaff}.shop-intro p{font-size:12px;line-height:1.55;color:#a4b2ce;margin:0}
+    .shop-form{margin-top:19px;padding:18px 16px;border:1px solid #3a4561;border-radius:19px;background:rgba(255,255,255,.028)}
+    .shop-form h3{font-size:14px;font-weight:800;margin:0 0 5px}.shop-form .shop-form-hint{margin:0 0 15px;color:#91a1ba;font-size:11px;line-height:1.5}
+    .shop-input{width:100%;background:#0c1424;color:#fff;border:1px solid #3b4866;border-radius:11px;min-height:44px;padding:11px 12px;outline:none;font-size:13px}
+    .shop-input:focus{border-color:#a393ff;box-shadow:var(--ring)}.shop-input::placeholder{color:#697895}
+    .shop-field-label{display:block;margin:12px 0 6px;font-size:11px;font-weight:750;color:#b9c5e1}
+    .shop-cost-frame{margin-top:16px;border:1px solid rgba(158,133,249,.26);border-radius:13px;background:rgba(112,85,200,.085);padding:13px}
+    .shop-cost-frame .points-choices{grid-template-columns:repeat(4,minmax(0,1fr))}
+    .shop-cost-frame .points-choice{font-size:11px;padding-block:11px}
+    .shop-price-control{display:flex;justify-content:space-between;gap:10px;align-items:center;margin-top:11px}
+    .shop-price-control label{font-size:11px;color:#b3bedb}
+    .shop-price-control input{width:138px;text-align:right;background:#0c1424;color:#fff;border-radius:10px;padding:10px 11px;border:1px solid #475573;font-size:13px;font-weight:850}
+    .shop-price-control input:focus{outline:none;border-color:#b6a7ff;box-shadow:var(--ring)}
+    .shop-cost-caption{color:#9faccc;font-size:10px;line-height:1.5;margin:9px 0 0}
+    .shop-submit{min-height:43px;display:inline-flex;justify-content:center;align-items:center;gap:7px;background:linear-gradient(135deg,#b49dff,#8976ef);color:#19122f;border:0;border-radius:11px;padding:11px 17px;font-size:12px;font-weight:850;margin-top:14px}
+    .shop-submit:hover{filter:brightness(1.08)}.shop-error{color:#ffc0c9;font-size:12px;margin:9px 0 0;line-height:1.45}
+    .shop-add-success{font-size:12px;margin:10px 0 0;line-height:1.55;padding:10px 12px;border-radius:11px;color:#a4f5d3;background:rgba(44,143,104,.14);border:1px solid rgba(87,218,158,.26)}
+    .shop-section-header{display:flex;align-items:baseline;justify-content:space-between;gap:10px;margin:23px 0 13px}.shop-section-header h3{margin:0;font-size:15px;font-weight:850}.shop-section-header small{color:#9eaac5;font-size:11px}
+    .shop-cart{margin-top:22px;padding:15px;border-radius:18px;border:1px solid rgba(168,143,255,.32);background:linear-gradient(145deg,rgba(125,102,208,.105),rgba(59,85,120,.06));scroll-margin:18px}
+    .shop-cart .shop-section-header{margin:0 0 6px}.shop-cart-hint{color:#adb9d3;font-size:11px;line-height:1.55;margin:0 0 13px}
+    .shop-cart-total{display:flex;align-items:center;justify-content:space-between;gap:8px;border:1px solid #374360;background:#10192b;padding:11px 12px;border-radius:11px;margin-bottom:12px;font-size:11px;color:#a8b7d0}
+    .shop-cart-total strong{font-size:15px;color:#bba9ff;font-variant-numeric:tabular-nums}
+    .shop-item-created{color:#8da6bc;font-size:10px;margin-top:8px}
+    .shop-cart-added{border-color:#9f8bff;box-shadow:0 0 0 2px rgba(159,139,255,.2)}
+    .shop-products{display:flex;flex-direction:column;gap:10px}
+    .shop-item{position:relative;border:1px solid #303c58;border-radius:16px;background:linear-gradient(118deg,#19243a,#141d30);padding:16px;scroll-margin:19vh}
+    .shop-item-top{display:flex;gap:12px;align-items:flex-start;justify-content:space-between}
+    .shop-item-name{font-size:14px;line-height:1.45;color:#f2f4ff;font-weight:800;overflow-wrap:anywhere;margin:0 0 6px}
+    .shop-item-desc{font-size:11px;color:#9eacc7;line-height:1.45;overflow-wrap:anywhere;margin:0}
+    .shop-price{flex:none;border:1px solid rgba(142,231,198,.28);background:rgba(67,175,141,.11);padding:7px 9px;border-radius:10px;color:#84e9c6;font-size:13px;font-weight:850;white-space:nowrap;font-variant-numeric:tabular-nums}
+    .shop-locked-price{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-top:17px;padding:12px 13px;border-radius:11px;border:1px solid rgba(160,174,205,.18);background:rgba(140,154,185,.07);color:#a7b4cf;font-size:12px}.shop-locked-price strong{color:#8fe5c8;font-size:14px;white-space:nowrap;font-variant-numeric:tabular-nums}
+    .shop-item-bottom{display:flex;gap:11px;align-items:center;justify-content:space-between;margin-top:14px}
+    .shop-redeem{border:0;border-radius:10px;padding:10px 13px;font-size:12px;font-weight:850;min-width:130px;background:#a999ff;color:#19112c}
+    .shop-redeem:hover:not(:disabled){filter:brightness(1.1)}.shop-redeem:disabled{background:#2b354b;color:#9eabc3;opacity:1;cursor:not-allowed}
+    .shop-mini-actions{display:flex;align-items:center;gap:6px}.shop-mini-actions button{min-width:36px;min-height:36px;border:1px solid #3c4660;background:#242d43;color:#aebbd4;border-radius:9px;padding:7px;display:grid;place-items:center}.shop-mini-actions button:hover{color:white;border-color:#8b7ce9}
+    .shop-purchases{display:flex;flex-direction:column;gap:8px}.shop-purchase{border-radius:12px;border:1px solid #303c53;background:#121d30;padding:11px 13px;display:flex;align-items:center;gap:10px;justify-content:space-between}
+    .shop-purchase strong{display:block;font-size:12px;color:#dfe6f7;line-height:1.3;overflow-wrap:anywhere}.shop-purchase small{display:block;margin-top:5px;color:#8393ad;font-size:10px}.shop-purchase .shop-purchase-cost{font-weight:800;color:#ffa7b4;font-size:12px;white-space:nowrap}
+    .shop-empty{border:1px dashed #3a4867;border-radius:14px;text-align:center;padding:25px 14px;color:#95a5c3;font-size:12px;line-height:1.55}.shop-empty b{display:block;color:#d5def1;font-size:14px;margin-bottom:6px}
+    .shop-confirm-details{border:1px solid #425075;background:#1f2b40;padding:13px;border-radius:12px;display:flex;justify-content:space-between;gap:10px;font-size:13px;font-weight:800;align-items:center;overflow-wrap:anywhere}.shop-confirm-details span{color:#8fe5c8;white-space:nowrap}
+    .shop-confirm-note{color:#9eafc9;font-size:11px;line-height:1.6;margin:12px 0 0}
+    .compact .shop-cart{padding:11px;margin-top:14px}.compact .shop-intro{padding-top:14px}.compact .shop-form{margin-top:12px;padding:12px}
+    @media(max-width:600px){.shop-page{padding:0 18px 24px}.primary-nav{margin-top:18px}}
+    @media(max-width:370px){.shop-cost-frame .points-choices{grid-template-columns:repeat(2,minmax(0,1fr))}.shop-item-top{flex-wrap:wrap}.shop-item-bottom{flex-wrap:wrap}.shop-redeem{flex:1}.shop-price-control input{width:118px}}
+  </style>
+</head>
+<body>
+  <main class="app" id="app">
+    <div class="shell">
+      <header class="top">
+        <div class="topline">
+          <div class="brand">
+            <div class="brand-icon" aria-hidden="true"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8.5"/><circle cx="12" cy="12" r="4.5"/><circle cx="12" cy="12" r=".8" fill="currentColor"/></svg></div>
+            <div><div class="eyebrow">1.1(Beta)</div><h1>Target: <span style="color:#ad9aff">Syrnik</span></h1></div>
+          </div>
+          <div class="header-actions">
+            <button id="compactBtn" type="button" class="icon-btn" title="Компактный режим" aria-label="Переключить компактный режим" aria-pressed="false"><svg width="19" height="19" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M7 10h10M7 14h6"/></svg></button>
+            <button id="installBtn" type="button" class="icon-btn" title="Установить приложение" aria-label="Установить приложение" hidden><svg width="19" height="19" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M12 3v12m-4-4 4 4 4-4M4 17v3h16v-3"/></svg></button>
+          </div>
+        </div>
+        <nav class="primary-nav" role="tablist" aria-label="Раздел приложения">
+          <button id="goalsNav" class="nav-btn" type="button" role="tab" aria-selected="true" aria-controls="goalsPage"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="4"/><path d="M12 9v6M9 12h6"/></svg>Цели</button>
+          <button id="shopNav" class="nav-btn" type="button" role="tab" aria-selected="false" aria-controls="shopPage"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 8h16l-1.4 12H5.4L4 8zM8 9V7a4 4 0 0 1 8 0v2"/></svg>Магазин</button>
+        </nav>
+        <div id="goalsHero">
+        <p class="headline">Маленький цели <em>на большие хотелки</em></p>
+        <div class="summary">
+          <div class="summary-icon" aria-hidden="true"><svg width="25" height="25" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 19V6l5-3 4 3 5-2v15l-5 2-4-3z"/><path d="M10 3v15m4-12v15"/></svg></div>
+          <div class="summary-main"><div class="summary-top"><span class="summary-title">Основные цели</span><span class="summary-num" id="progressNum">0 / 0</span></div><div class="summary-detail" id="progressDetail">Добавь первую цель, чтобы начать</div><div class="progress" role="progressbar" aria-label="Выполнение основных целей" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" id="progress"><div class="progress-inner" id="progressBar"></div></div></div>
+        </div>
+        </div>
+        <section class="wallet" aria-label="Кошелёк E-баллов">
+          <div class="wallet-head"><div class="wallet-symbol" aria-hidden="true">E</div><div class="wallet-info"><div class="wallet-label">Баланс</div><div class="wallet-balance" id="walletBalance">0 E</div></div><button type="button" class="wallet-history" id="historyBtn">История</button></div>
+          <div class="wallet-stats"><span class="wallet-stat">Получено <b id="walletEarned" class="pos">+0 E</b></span><span class="wallet-stat">Списано <b id="walletSpent" class="neg">−0 E</b></span></div>
+        </section>
+      </header>
+      <section id="goalsPage" role="tabpanel" aria-labelledby="goalsNav">
+      <form class="new-goal" id="newGoalForm" autocomplete="off" novalidate>
+        <p class="small-heading">Добавить новую цель</p>
+        <div class="add-row"><label class="sr-only" for="newGoalName">Название цели</label><input class="goal-input" id="newGoalName" type="text" maxlength="160" placeholder="Чего хочешь достичь?" required><button class="add-btn" id="addGoalBtn" type="button"><svg width="17" height="17" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" fill="none"><path d="M12 5v14M5 12h14"/></svg><span class="add-label">Добавить</span></button></div>
+        <p class="add-error" id="addError" role="alert" hidden></p><p class="add-success" id="addSuccess" role="status" hidden></p>
+        <div class="kind-controls" role="group" aria-label="Важность цели"><label class="kind-option"><input type="radio" name="kind" value="main" checked><span><i class="mark"></i> Основная · обязательно</span></label><label class="kind-option optional"><input type="radio" name="kind" value="extra"><span><i class="mark"></i> Дополнительная</span></label></div>
+
+        <section class="points-frame" aria-labelledby="newPointsHeading">
+          <div class="points-frame-head"><h2 class="points-heading" id="newPointsHeading">◈ Стоимость цели в E-баллах</h2><span class="points-current" id="newPointsPreview">+50 E / −50 E</span></div>
+          <div class="points-choices" id="newPointsChoices" role="group" aria-label="Быстрая стоимость задачи">
+            <button type="button" class="points-choice" data-value="10">10 E</button><button type="button" class="points-choice" data-value="25">25 E</button><button type="button" class="points-choice" data-value="50">50 E</button><button type="button" class="points-choice" data-value="100">100 E</button><button type="button" class="points-choice" data-value="200">200 E</button>
+          </div>
+          <div class="points-custom"><label for="newGoalPoints">Или установи свою стоимость</label><input id="newGoalPoints" name="points" type="number" min="1" max="10000" step="1" inputmode="numeric" value="50" required></div>
+          <p class="points-help">✓ Выполнил: +стоимость. ✕ Провал: −стоимость. Выбор окончательный.</p>
+        </section>
+        <section class="timer-frame" aria-labelledby="newTimerHeading">
+          <div class="timer-frame-title"><span aria-hidden="true">⏳</span><h2 id="newTimerHeading">Таймер цели</h2><span class="timer-optional">по желанию</span></div>
+          <label class="timer-label" for="newGoalTimer">Сколько времени на выполнение?</label>
+          <select id="newGoalTimer" class="timer-select">
+            <option value="0" selected>Без таймера</option>
+            <option value="1">1 день</option><option value="2">2 дня</option>
+            <option value="3">3 дня</option><option value="4">4 дня</option>
+            <option value="5">5 дней</option><option value="6">6 дней</option>
+            <option value="7">7 дней (неделя)</option>
+          </select>
+          <p class="timer-help">При выборе от 1 до 7 дней отсчёт начинается сразу. Если время выйдет, цель автоматически получит «Провал» и штраф −E, даже если приложение было закрыто.</p>
+        </section>
+      </form>
+      <div class="sections"><div class="tabs" role="tablist" aria-label="Фильтр целей"><button class="tab" type="button" data-filter="all" role="tab" aria-selected="true">Все цели</button><button class="tab" type="button" data-filter="active" role="tab" aria-selected="false">В процессе</button><button class="tab" type="button" data-filter="done" role="tab" aria-selected="false">Выполнены</button><button class="tab" type="button" data-filter="failed" role="tab" aria-selected="false">Не выполнены</button></div>
+        <section class="group" aria-labelledby="mainHeading"><div class="group-title"><div class="group-icon" aria-hidden="true"><svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2 9 9l-7 3 7 3 3 7 3-7 7-3-7-3z"/></svg></div><h2 id="mainHeading">Основные</h2><span class="count" id="mainCount">0 целей</span></div><div class="task-list" id="mainList"></div></section>
+        <section class="group optional" aria-labelledby="extraHeading"><div class="group-title"><div class="group-icon" aria-hidden="true"><svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 2 2.6 6.9L22 12l-7.4 3.1L12 22l-2.6-6.9L2 12l7.4-3.1z"/></svg></div><h2 id="extraHeading">Дополнительные</h2><span class="count" id="extraCount">0 целей</span></div><div class="task-list" id="extraList"></div></section>
+      </div>
+
+      </section><!-- /goalsPage -->
+      <section id="shopPage" class="shop-page" role="tabpanel" aria-labelledby="shopNav" hidden>
+        <div class="shop-intro">
+          <h2>Магазин <span>хотелок 🛍️</span></h2>
+          <p>Добавляй хотелки в корзину, копи E за цели и покупай награды, когда решишь. Цены — от 500 E.</p>
+        </div>
+        <form class="shop-form" id="shopNewForm" autocomplete="off" novalidate>
+          <h3>＋ Добавить товар</h3>
+          <p class="shop-form-hint">Всё как с целями: придумай награду и назначь ей цену.</p>
+          <label class="shop-field-label" for="shopNewName">Что можно получить?</label>
+          <input class="shop-input" id="shopNewName" type="text" maxlength="160" placeholder="Например: вечер игр 🎮" required>
+          <label class="shop-field-label" for="shopNewDesc">Описание <span class="muted">(необязательно)</span></label>
+          <input class="shop-input" id="shopNewDesc" type="text" maxlength="260" placeholder="За что себя побалуешь?">
+          <div class="shop-cost-frame">
+            <div class="points-frame-head"><span class="points-heading">◈ Стоимость товара</span><span class="points-current" id="shopPricePreview">500 E</span></div>
+            <div class="points-choices" id="shopPriceChoices" role="group" aria-label="Быстрый выбор цены">
+              <button class="points-choice" type="button" data-shop-price="500">500 E</button>
+              <button class="points-choice" type="button" data-shop-price="750">750 E</button>
+              <button class="points-choice" type="button" data-shop-price="1000">1 000 E</button>
+              <button class="points-choice" type="button" data-shop-price="2000">2 000 E</button>
+            </div>
+            <div class="shop-price-control"><label for="shopNewPrice">Или своя цена</label><input id="shopNewPrice" type="number" inputmode="numeric" min="500" max="999999999" step="1" value="500" required></div>
+            <p class="shop-cost-caption">Минимальная стоимость — 500 E. Добавление в корзину бесплатное, E списываются только после покупки.</p>
+          </div>
+          <p class="shop-error" id="shopAddError" role="alert" hidden></p>
+          <button class="shop-submit" id="shopAddBtn" type="button">＋ Добавить в корзину</button>
+          <p class="shop-add-success" id="shopAddSuccess" role="status" aria-live="polite" hidden></p>
+        </form>
+        <section class="shop-cart" aria-labelledby="shopCartTitle">
+          <div class="shop-section-header"><h3 id="shopCartTitle">🛒 Корзина</h3><small id="shopCount">0 товаров</small></div>
+          <p class="shop-cart-hint">Здесь твои хотелки. Можешь оставить их на потом, изменить или купить за E.</p>
+          <div class="shop-cart-total"><span>Стоимость всех хотелок</span><strong id="shopCartTotal">0 E</strong></div>
+          <div class="shop-products" id="shopProducts" aria-live="polite"></div>
+        </section>
+        <div class="shop-section-header"><h3>История покупок</h3><small id="shopPurchasesCount">0 покупок</small></div>
+        <div class="shop-purchases" id="shopPurchases"></div>
+      </section>
+      <footer class="footer"><p>Target: Syrnik 1.1(Beta) · Удачи в накоплениях:)</p><details class="menu" id="menu"><summary>Настройки <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg></summary><div class="menu-pop"><button id="exportBtn" type="button">↓ Экспортировать все данные</button><button id="importBtn" type="button">↑ Импортировать все данные</button><button id="clearDoneBtn" type="button">✓ Удалить выполненные</button><button id="clearAllBtn" type="button" class="danger">✕ Очистить список</button></div></details><input type="file" id="importFile" accept=".json,application/json" class="sr-only" aria-label="Файл данных приложения"></footer>
+    </div>
+  </main>
+
+  <dialog class="modal" id="pointsDialog" aria-labelledby="pointsDialogTitle">
+    <form id="editPointsForm">
+      <h2 id="pointsDialogTitle">Стоимость задачи ◈</h2>
+      <p class="subtitle" id="pointsTaskName"></p>
+      <section class="points-frame" aria-label="Выбор E-баллов для задачи">
+        <div class="points-frame-head"><span class="points-heading">Выбери цену задачи</span><span class="points-current" id="modalPointsPreview">+50 E / −50 E</span></div>
+        <div class="points-choices" id="modalPointsChoices" role="group" aria-label="Готовые значения стоимости">
+          <button type="button" class="points-choice" data-value="10">10 E</button><button type="button" class="points-choice" data-value="25">25 E</button><button type="button" class="points-choice" data-value="50">50 E</button><button type="button" class="points-choice" data-value="100">100 E</button><button type="button" class="points-choice" data-value="200">200 E</button>
+        </div>
+        <div class="points-custom"><label for="modalPointsInput">Своя стоимость</label><input id="modalPointsInput" type="number" min="1" max="10000" step="1" inputmode="numeric" required></div>
+        <p class="points-help">Стоимость можно менять только до выбора «Готово» или «Провал».</p>
+      </section>
+      <div class="modal-actions"><button type="button" id="cancelPointsBtn">Отмена</button><button type="submit" class="primary">Сохранить стоимость</button></div>
+    </form>
+  </dialog>
+  <dialog class="modal" id="editGoalDialog" aria-labelledby="editGoalTitle">
+    <form id="editGoalForm" autocomplete="off" novalidate>
+      <h2 id="editGoalTitle">Изменить цель</h2><p class="subtitle" id="editGoalHint">Название, категория и таймер.</p>
+      <label class="field-label" for="editGoalName">Название цели</label>
+      <input class="dialog-input" type="text" id="editGoalName" maxlength="160" required>
+      <label class="field-label" for="editGoalKind">Категория</label>
+      <select class="dialog-input" id="editGoalKind"><option value="main">Основная · обязательная</option><option value="extra">Дополнительная</option></select>
+      <div id="editTimerWrap">
+        <label class="field-label" for="editGoalTimer">Таймер</label>
+        <select class="dialog-input" id="editGoalTimer"><option value="0">Без таймера</option><option value="1">1 день</option><option value="2">2 дня</option><option value="3">3 дня</option><option value="4">4 дня</option><option value="5">5 дней</option><option value="6">6 дней</option><option value="7">7 дней</option></select>
+        <p class="timer-help">Если изменить длительность, новый отсчёт начнётся с момента сохранения.</p>
+      </div>
+      <p id="editTimerLocked" class="locked-note" hidden>Результат окончательный. Таймер и E-баллы этой цели больше не меняются.</p>
+      <p class="dialog-error" id="editGoalError" role="alert" hidden></p>
+      <div class="modal-actions"><button id="cancelEditGoal" type="button">Отмена</button><button type="submit" class="primary">Сохранить</button></div>
+    </form>
+  </dialog>
+  <dialog class="modal" id="statusGoalDialog" aria-labelledby="statusGoalTitle">
+    <h2 id="statusGoalTitle">Подтвердить результат?</h2>
+    <p class="subtitle" id="statusGoalName"></p>
+    <p class="locked-note" id="statusGoalWarning">Это действие окончательное, отменить его будет нельзя.</p>
+    <div class="modal-actions"><button type="button" id="cancelStatusGoal">Отмена</button><button type="button" class="primary" id="confirmStatusGoal">Подтвердить</button></div>
+  </dialog>
+  <dialog class="modal" id="deleteGoalDialog" aria-labelledby="deleteGoalTitle">
+    <h2 id="deleteGoalTitle">Удалить цель?</h2>
+    <p class="subtitle" id="deleteGoalName"></p>
+    <p class="locked-note">Удаление уберёт задачу из списка. E-баллы и записи в истории останутся без изменений.</p>
+    <div class="modal-actions"><button type="button" id="cancelDeleteGoal">Отмена</button><button type="button" class="danger-confirm" id="confirmDeleteGoal">Да, удалить</button></div>
+  </dialog>
+
+  <dialog class="modal" id="shopEditDialog" aria-labelledby="shopEditTitle">
+    <form id="shopEditForm" novalidate>
+      <h2 id="shopEditTitle">Изменить товар</h2>
+      <p class="subtitle">Можно исправить название и описание. Цена фиксируется при добавлении в корзину.</p>
+      <label class="field-label" for="shopEditName">Название награды</label>
+      <input class="dialog-input" id="shopEditName" type="text" maxlength="160" required>
+      <label class="field-label" for="shopEditDesc">Описание (необязательно)</label>
+      <input class="dialog-input" id="shopEditDesc" type="text" maxlength="260">
+      <div class="shop-locked-price" aria-label="Стоимость товара, не меняется после добавления">
+        <span>🔒 Зафиксированная цена</span><strong id="shopEditLockedPrice">500 E</strong>
+      </div>
+      <p class="dialog-error" id="shopEditError" role="alert" hidden></p>
+      <div class="modal-actions"><button type="button" id="shopEditCancel">Отмена</button><button class="primary" type="submit">Сохранить</button></div>
+    </form>
+  </dialog>
+  <dialog class="modal" id="shopDeleteDialog" aria-labelledby="shopDeleteTitle">
+    <h2 id="shopDeleteTitle">Удалить товар?</h2>
+    <p class="subtitle" id="shopDeleteName"></p>
+    <p class="locked-note">Товар исчезнет из магазина, но уже совершённые покупки и потраченные E останутся в истории.</p>
+    <div class="modal-actions"><button type="button" id="shopDeleteCancel">Отмена</button><button class="danger-confirm" type="button" id="shopDeleteConfirm">Удалить товар</button></div>
+  </dialog>
+  <dialog class="modal" id="shopBuyDialog" aria-labelledby="shopBuyTitle">
+    <h2 id="shopBuyTitle">Купить награду?</h2>
+    <p class="subtitle">Подтверди обмен своих E-баллов.</p>
+    <div class="shop-confirm-details"><strong id="shopBuyName"></strong><span id="shopBuyPrice">−500 E</span></div>
+    <p class="shop-confirm-note" id="shopBuyBalanceAfter"></p><p class="shop-confirm-note">После покупки товар исчезнет из корзины и останется в истории покупок.</p>
+    <div class="modal-actions"><button type="button" id="shopBuyCancel">Отмена</button><button class="primary" type="button" id="shopBuyConfirm">Обменять E</button></div>
+  </dialog>
+  <dialog class="modal" id="historyDialog" aria-labelledby="historyTitle"><h2 id="historyTitle">История E-баллов</h2><p class="subtitle">Начисления за цели, штрафы и покупки в магазине. История остаётся после удаления задач и товаров.</p><div id="historyList" class="history-list"></div><div class="modal-actions"><button type="button" class="primary" id="closeHistoryBtn">Закрыть</button></div></dialog>
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+  <script>
+  (() => {
+    'use strict';
+    const STORAGE_KEY = 'focus_goals_v2'; // Сохраняем ключ, чтобы не потерять старые цели и баланс
+    const OLD_STORAGE_KEY = 'focus_goals_v1';
+    const MODE_KEY = 'focus_compact_v1';
+    const MAX_POINTS = 10000;
+    const MAX_TASKS = 10000;
+    const MAX_HISTORY = 250;
+    const MIN_SHOP_PRICE = 500;
+    const MAX_SHOP_PRICE = 999999999;
+    const MAX_PRODUCTS = 500;
+    const MAX_PURCHASES = 500;
+    const DAY_MS = 24*60*60*1000;
+    const STARTER_NAME = 'Вытерпеть(почти) буллинг от тупого задиры Леске';
+    const PREVIOUS_STARTER_NAME = 'Вытерпеть буллинг от мейнера Рейны';
+    const STARTER_ID = 'focus-starter-reyna-v3';
+    const $ = id => document.getElementById(id);
+    const app = $('app');
+    const icon = {
+      check:'<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12 4 4L19 6"/></svg>',
+      edit:'<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m14 5 5 5M4 20l4.5-1 11-11a2.12 2.12 0 0 0-3-3l-11 11L4 20z"/></svg>',
+      coin:'<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M15.5 8H9v8h6.5M9 12h5"/></svg>',
+      clock:'<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>',
+      trash:'<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16M10 4h4m4 3-.8 13H6.8L6 7m4 4v6m4-6v6"/></svg>'
+    };
+    function makeId(){try{if(globalThis.crypto&&typeof globalThis.crypto.randomUUID==='function')return globalThis.crypto.randomUUID();}catch{}return String(Date.now())+'-'+Math.random().toString(36).slice(2);}
+    function defaultPoints(kind){return kind==='extra'?10:50;}
+    function safePoints(value,fallback){const n=Number(value);return Number.isSafeInteger(n)&&n>=1&&n<=MAX_POINTS?n:fallback;}
+    function normalize(item){
+      if(!item||typeof item!=='object'||typeof item.name!=='string')return null;
+      const name=item.name.trim().slice(0,160);if(!name)return null;
+      const kind=item.kind==='extra'?'extra':'main';
+      const status=['pending','done','failed'].includes(item.status)?item.status:(item.done===true?'done':'pending');
+      const points=safePoints(item.points,defaultPoints(kind));
+      const applied=Number.isSafeInteger(item.applied)&&Math.abs(item.applied)<=MAX_POINTS?item.applied:0;
+      const timerDays=Number.isInteger(item.timerDays)&&item.timerDays>=1&&item.timerDays<=7?item.timerDays:0;
+      const deadlineAt=timerDays&&Number.isFinite(item.deadlineAt)&&item.deadlineAt>0?item.deadlineAt:null;
+      const resolvedAt=Number.isFinite(item.resolvedAt)&&item.resolvedAt>0?item.resolvedAt:null;
+      return {id:typeof item.id==='string'&&item.id.length<100?item.id:makeId(),name,kind,status,points,applied,createdAt:Number.isFinite(item.createdAt)&&item.createdAt>0&&item.createdAt<=8640000000000000?item.createdAt:null,timerDays,deadlineAt,resolvedAt};
+    }
+    function normalizeProduct(p){
+      if(!p||typeof p!=='object'||typeof p.name!=='string')return null;
+      const name=p.name.trim().slice(0,160);
+      if(!name||!Number.isSafeInteger(p.price)||p.price<MIN_SHOP_PRICE||p.price>MAX_SHOP_PRICE)return null;
+      return {id:typeof p.id==='string'&&p.id.length<100?p.id:makeId(),name,description:typeof p.description==='string'?p.description.trim().slice(0,260):'',price:p.price,createdAt:Number.isFinite(p.createdAt)&&p.createdAt>0&&p.createdAt<=8640000000000000?p.createdAt:Date.now()};
+    }
+    function cleanProducts(raw){return Array.isArray(raw)?raw.slice(0,MAX_PRODUCTS).map(normalizeProduct).filter(Boolean):[];}
+    function cleanPurchases(raw){
+      if(!Array.isArray(raw))return [];
+      return raw.slice(0,MAX_PURCHASES).filter(p=>p&&typeof p.name==='string'&&p.name.trim()&&Number.isSafeInteger(p.price)&&p.price>=MIN_SHOP_PRICE&&p.price<=MAX_SHOP_PRICE)
+        .map(p=>({id:typeof p.id==='string'&&p.id.length<100?p.id:makeId(),name:p.name.slice(0,160),price:p.price,at:Number.isFinite(p.at)&&p.at>0&&p.at<=8640000000000000?p.at:Date.now()}));
+    }
+    function cleanWallet(raw){
+      const safe=v=>Number.isSafeInteger(v)&&Math.abs(v)<=Number.MAX_SAFE_INTEGER?v:0;
+      return {balance:safe(raw?.balance),earned:Math.max(0,safe(raw?.earned)),spent:Math.max(0,safe(raw?.spent))};
+    }
+    function cleanHistory(raw){
+      if(!Array.isArray(raw))return [];
+      return raw.slice(0,MAX_HISTORY).filter(h=>h&&typeof h==='object'&&typeof h.taskName==='string'&&Number.isSafeInteger(h.amount)&&Math.abs(h.amount)<=MAX_SHOP_PRICE).map(h=>({id:makeId(),taskName:h.taskName.slice(0,160),amount:h.amount,action:typeof h.action==='string'?h.action.slice(0,80):'Операция',at:Number.isFinite(h.at)?h.at:Date.now()}));
+    }
+    // Если постоянное хранилище запрещено браузером, сохраняем хотя бы до закрытия вкладки.
+    // Данные предыдущих версий продолжают использовать прежний ключ focus_goals_v2.
+    function selectStorage(){
+      for(const type of ['localStorage','sessionStorage']){
+        try{
+          const storage=window[type],key='__syrnik_storage_test__';
+          storage.setItem(key,'1');storage.removeItem(key);
+          return {storage,type};
+        }catch{}
+      }
+      return {storage:null,type:'memory'};
+    }
+    const storageAccess=selectStorage();
+    let warnedAboutStorage=false;
+    function load(){
+      try {
+        const stored=storageAccess.storage?.getItem(STORAGE_KEY);
+        if(stored!==null){const d=JSON.parse(stored);if(!d||!Array.isArray(d.tasks))throw Error('invalid');return {tasks:d.tasks.slice(0,MAX_TASKS).map(normalize).filter(Boolean),wallet:cleanWallet(d.wallet),history:cleanHistory(d.history),starterRewardApplied:d.starterRewardApplied===true,products:cleanProducts(d.products),purchases:cleanPurchases(d.purchases)};}
+        const legacy=JSON.parse(storageAccess.storage?.getItem(OLD_STORAGE_KEY)||'[]');
+        return {tasks:Array.isArray(legacy)?legacy.slice(0,MAX_TASKS).map(normalize).filter(Boolean):[],wallet:cleanWallet(null),history:[],starterRewardApplied:false,products:[],purchases:[]};
+      } catch{return {tasks:[],wallet:cleanWallet(null),history:[],starterRewardApplied:false,products:[],purchases:[]};}
+    }
+    const stored=load();let tasks=stored.tasks,wallet=stored.wallet,history=stored.history,starterRewardApplied=stored.starterRewardApplied,products=stored.products,purchases=stored.purchases;
+    let filter='all',editingId=null,deletingId=null,statusId=null,requestedStatus=null,pricingId=null,toastTimeout,deferredInstall=null,hasCustomPrice=false;
+    function save(){
+      try{
+        if(!storageAccess.storage)throw Error('storage not available');
+        storageAccess.storage.setItem(STORAGE_KEY,JSON.stringify({version:6,tasks,wallet,history,starterRewardApplied,products,purchases}));
+        if(storageAccess.type==='sessionStorage'&&!warnedAboutStorage){warnedAboutStorage=true;toast('Сохранено на время сессии. Для постоянного хранения разреши данные сайтов.');}
+        return true;
+      }catch{
+        if(!warnedAboutStorage){warnedAboutStorage=true;toast('Нет доступа к памяти браузера. Изменения могут исчезнуть после закрытия.');}
+        return false;
+      }
+    }
+    function toast(message){const el=$('toast');el.textContent=message;el.classList.add('show');clearTimeout(toastTimeout);toastTimeout=setTimeout(()=>el.classList.remove('show'),2900);}
+    function fmt(n){return new Intl.NumberFormat('ru-RU').format(n);}
+    const createdDateFormatter=new Intl.DateTimeFormat('ru-RU',{day:'2-digit',month:'2-digit',year:'numeric',hour:'2-digit',minute:'2-digit'});
+    function formatCreatedAt(timestamp){return timestamp==null?'Дата добавления неизвестна':createdDateFormatter.format(timestamp);}
+    function signed(n){return (n>0?'+':n<0?'−':'')+fmt(Math.abs(n))+' E';}
+    function plural(n){const m=n%100;if(m>=11&&m<=14)return 'целей';const r=n%10;return r===1?'цель':r>=2&&r<=4?'цели':'целей';}
+    function filtered(list){return list.filter(t=>filter==='all'||(filter==='active'&&t.status==='pending')||(filter==='done'&&t.status==='done')||(filter==='failed'&&t.status==='failed'));}
+    function makeButton(cls,label,svg,handler){const b=document.createElement('button');b.type='button';b.className=cls;b.setAttribute('aria-label',label);b.title=label;b.innerHTML=svg;b.addEventListener('click',handler);return b;}
+    function statusButton(label,cls,pressed,handler){const b=document.createElement('button');b.type='button';b.className='status-btn '+cls;b.textContent=label;b.setAttribute('aria-pressed',String(pressed));b.addEventListener('click',handler);return b;}
+    function record(t,delta,action){
+      if(!delta)return;
+      wallet.balance+=delta;
+      if(delta>0)wallet.earned+=delta;else wallet.spent+=-delta;
+      history.unshift({id:makeId(),taskName:t.name,amount:delta,action,at:Date.now()});
+      if(history.length>MAX_HISTORY)history.length=MAX_HISTORY;
+    }
+    // Добавляем стартовую выполненную цель только один раз для каждого хранилища.
+    // Если пользователь сам уже создал такую цель, используем её вместо дубликата.
+    function ensureStarterGoal(){
+      if(starterRewardApplied)return;
+      let starter=tasks.find(t=>t.id===STARTER_ID||t.name===STARTER_NAME||t.name===PREVIOUS_STARTER_NAME);
+      if(!starter){
+        starter={id:STARTER_ID,name:STARTER_NAME,kind:'extra',status:'done',points:200,applied:200,createdAt:Date.now()};
+        tasks.unshift(starter);
+        record(starter,200,'Стартовая выполненная цель');
+      }else{
+        const previouslyApplied=starter.applied;
+        starter.name=STARTER_NAME;
+        starter.kind='extra';starter.status='done';starter.points=200;starter.applied=200;
+        record(starter,200-previouslyApplied,'Стартовая выполненная цель');
+      }
+      starterRewardApplied=true;
+      save();
+    }
+    // Миграция для 1.0(Beta): переименовываем ранее выданную дополнительную цель,
+    // не меняя завершённость, историю баланса и начисление +200 E.
+    function renameExistingStarter(){
+      let changed=false;
+      for(const t of tasks){
+        if(t.name===PREVIOUS_STARTER_NAME && (t.id===STARTER_ID || (t.kind==='extra' && t.status==='done' && t.points===200))){
+          t.name=STARTER_NAME;
+          changed=true;
+        }
+      }
+      for(const h of history){
+        if(h.taskName===PREVIOUS_STARTER_NAME && h.action==='Стартовая выполненная цель'){
+          h.taskName=STARTER_NAME;
+          changed=true;
+        }
+      }
+      if(changed)save();
+    }
+    renameExistingStarter();
+    ensureStarterGoal();
+    // Окончательный выбор: завершённая цель никогда не возвращается в ожидание.
+    function setStatus(t,next){
+      if(t.status!=='pending'||(next!=='done'&&next!=='failed'))return;
+      if(expireGoals())render(); // Не позволяем выполнить задачу после истечения срока.
+      if(t.status!=='pending'){toast('Срок вышел: цель уже получила «Провал»');return;}
+      t.status=next;t.resolvedAt=Date.now();t.applied=next==='done'?t.points:-t.points;
+      record(t,t.applied,next==='done'?'Выполнена · окончательно':'Не выполнена · окончательно');
+      save();render();toast(next==='done'?'Начислено +'+fmt(t.points)+' E ✓':'Списано −'+fmt(t.points)+' E');
+    }
+    function expireGoals(){
+      let changed=false,now=Date.now();
+      for(const t of tasks){
+        if(t.status==='pending'&&t.deadlineAt!=null&&t.deadlineAt<=now){
+          t.status='failed';t.resolvedAt=t.deadlineAt;t.applied=-t.points;
+          record(t,-t.points,'Время вышло · автоматический провал');changed=true;
+        }
+      }
+      if(changed)save();return changed;
+    }
+    function prettyRemaining(ms){
+      const minutes=Math.max(0,Math.ceil(ms/60000));
+      const d=Math.floor(minutes/1440),h=Math.floor(minutes%1440/60),m=minutes%60;
+      return (d?d+' д ':'')+(h?h+' ч ':'')+(m||(!d&&!h)?m+' мин':'').trim();
+    }
+    function updateTimerLabels(){
+      document.querySelectorAll('.task-timer[data-deadline]').forEach(label=>{
+        const diff=Number(label.dataset.deadline)-Date.now();
+        label.textContent=diff<=0?'⏳ Срок истёк':'⏳ Осталось '+prettyRemaining(diff);
+        label.classList.toggle('urgent',diff<=DAY_MS);
+      });
+    }
+    function updatePointsUI(input,buttonsId,previewId){
+      const n=Number(input.value);const valid=Number.isSafeInteger(n)&&n>=1&&n<=MAX_POINTS;
+      $(previewId).textContent=valid?('+'+fmt(n)+' E / −'+fmt(n)+' E'):'Введите от 1 до 10 000 E';
+      document.querySelectorAll('#'+buttonsId+' [data-value]').forEach(b=>b.setAttribute('aria-pressed',String(valid&&Number(b.dataset.value)===n)));
+      return valid;
+    }
+    function attachPresetButtons(buttonsId,inputId,previewId,onUserChange){
+      const input=$(inputId);
+      document.querySelectorAll('#'+buttonsId+' [data-value]').forEach(btn=>btn.addEventListener('click',()=>{input.value=btn.dataset.value;onUserChange?.();updatePointsUI(input,buttonsId,previewId);}));
+      input.addEventListener('input',()=>{onUserChange?.();updatePointsUI(input,buttonsId,previewId);});
+      updatePointsUI(input,buttonsId,previewId);
+    }
+    attachPresetButtons('newPointsChoices','newGoalPoints','newPointsPreview',()=>hasCustomPrice=true);
+    attachPresetButtons('modalPointsChoices','modalPointsInput','modalPointsPreview');
+    function openPoints(t){
+      if(expireGoals())render();
+      if(t.status!=='pending'){toast('Стоимость завершённой цели менять нельзя');return;}
+      pricingId=t.id;$('pointsTaskName').textContent=t.name;
+      $('modalPointsInput').value=t.points;
+      updatePointsUI($('modalPointsInput'),'modalPointsChoices','modalPointsPreview');
+      $('pointsDialog').showModal();
+    }
+    $('editPointsForm').addEventListener('submit',e=>{
+      e.preventDefault();const n=Number($('modalPointsInput').value);
+      if(!Number.isSafeInteger(n)||n<1||n>MAX_POINTS){toast('Допустимая стоимость: от 1 до 10 000 E');return;}
+      const t=tasks.find(t=>t.id===pricingId);if(!t){$('pointsDialog').close();return;}
+      if(expireGoals())render();
+      if(t.status!=='pending'){$('pointsDialog').close();toast('Стоимость завершённой цели менять нельзя');return;}
+      t.points=n;
+      $('pointsDialog').close();pricingId=null;save();render();toast('Стоимость цели: '+fmt(n)+' E');
+    });
+    $('cancelPointsBtn').addEventListener('click',()=>$('pointsDialog').close());
+    $('pointsDialog').addEventListener('close',()=>pricingId=null);
+    $('pointsDialog').addEventListener('click',e=>{if(e.target===$('pointsDialog'))$('pointsDialog').close();});
+    function openStatusConfirm(t,status){
+      if(expireGoals())render();
+      if(t.status!=='pending'){toast('Результат цели уже зафиксирован');return;}
+      statusId=t.id;requestedStatus=status;
+      $('statusGoalName').textContent='«'+t.name+'»';
+      $('statusGoalTitle').textContent=status==='done'?'Отметить как выполненную?':'Отметить как проваленную?';
+      $('statusGoalWarning').textContent=(status==='done'?'Начислится +':'Спишется −')+fmt(t.points)+' E. Это окончательный выбор: изменить результат и стоимость позже нельзя.';
+      $('confirmStatusGoal').textContent=status==='done'?'Да, выполнена':'Да, провал';
+      $('statusGoalDialog').showModal();
+    }
+    $('cancelStatusGoal').addEventListener('click',()=>$('statusGoalDialog').close());
+    $('statusGoalDialog').addEventListener('close',()=>{statusId=null;requestedStatus=null;});
+    $('confirmStatusGoal').addEventListener('click',()=>{
+      const t=tasks.find(x=>x.id===statusId),next=requestedStatus;
+      $('statusGoalDialog').close();statusId=null;requestedStatus=null;
+      if(t)setStatus(t,next);
+    });
+    function openEditGoal(t){
+      if(expireGoals())render();
+      editingId=t.id;
+      $('editGoalName').value=t.name;
+      $('editGoalKind').value=t.kind;
+      $('editGoalTimer').value=String(t.timerDays||0);
+      const locked=t.status!=='pending';
+      $('editTimerWrap').hidden=locked;
+      $('editTimerLocked').hidden=!locked;
+      $('editGoalHint').textContent=locked?'Можно изменить только название и категорию. Результат и E-баллы закреплены.':'Измени название, важность или длительность таймера.';
+      $('editGoalError').hidden=true;
+      $('editGoalDialog').showModal();
+      $('editGoalName').focus();
+    }
+    $('editGoalForm').addEventListener('submit',e=>{
+      e.preventDefault();
+      const t=tasks.find(t=>t.id===editingId);if(!t){$('editGoalDialog').close();return;}
+      const name=$('editGoalName').value.trim();
+      if(!name){$('editGoalError').textContent='Укажи название цели';$('editGoalError').hidden=false;$('editGoalName').focus();return;}
+      const kind=$('editGoalKind').value==='extra'?'extra':'main';
+      if(expireGoals())render();
+      if(t.status==='pending'){
+        const days=Number($('editGoalTimer').value);
+        if(!Number.isInteger(days)||days<0||days>7){$('editGoalError').textContent='Таймер: от 1 до 7 дней или без таймера';$('editGoalError').hidden=false;return;}
+        if(days!==t.timerDays){t.timerDays=days;t.deadlineAt=days?Date.now()+days*DAY_MS:null;}
+      }
+      t.name=name;t.kind=kind;
+      $('editGoalDialog').close();editingId=null;filter='all';save();render();toast('Цель изменена');
+    });
+    $('cancelEditGoal').addEventListener('click',()=>$('editGoalDialog').close());
+    $('editGoalDialog').addEventListener('close',()=>{editingId=null;});
+    function openDeleteGoal(t){
+      deletingId=t.id;
+      $('deleteGoalName').textContent='«'+t.name+'»';
+      $('deleteGoalDialog').showModal();
+      $('cancelDeleteGoal').focus();
+    }
+    $('cancelDeleteGoal').addEventListener('click',()=>$('deleteGoalDialog').close());
+    $('deleteGoalDialog').addEventListener('close',()=>{deletingId=null;});
+    $('confirmDeleteGoal').addEventListener('click',()=>{
+      const original=tasks.length;
+      tasks=tasks.filter(t=>t.id!==deletingId);
+      $('deleteGoalDialog').close();
+      deletingId=null;
+      if(tasks.length!==original){save();render();toast('Цель удалена. Баланс E не изменён');}
+    });
+    function taskAction(cls,label,svg,action,t){
+      const b=document.createElement('button');b.type='button';b.className=cls;b.innerHTML=svg;
+      b.title=label;b.setAttribute('aria-label',label);b.dataset.action=action;b.dataset.id=t.id;
+      return b;
+    }
+    function renderTask(t){
+      const el=document.createElement('article');el.className='task'+(t.status==='done'?' done':t.status==='failed'?' failed':'');el.dataset.id=t.id;
+      const content=document.createElement('div');content.className='task-content';
+      const top=document.createElement('div');top.className='task-top';
+      const name=document.createElement('div');name.className='task-name';name.textContent=t.name;
+      const cost=document.createElement('span');cost.className='task-price';cost.textContent=fmt(t.points)+' E';cost.title='Награда +'+t.points+' E / штраф −'+t.points+' E';
+      top.append(name,cost);content.append(top);
+      // Дата создания фиксируется при добавлении и никогда не меняется при редактировании.
+      const created=document.createElement('div');created.className='task-created';
+      created.textContent=t.createdAt==null?'Добавлена: дата неизвестна':'Добавлена: '+formatCreatedAt(t.createdAt);
+      content.append(created);
+      if(t.deadlineAt!=null){
+        const timer=document.createElement('div');timer.className='task-timer';
+        if(t.status==='pending')timer.dataset.deadline=String(t.deadlineAt);
+        else{timer.classList.add('completed');timer.textContent='⏱ Срок: '+new Intl.DateTimeFormat('ru-RU',{day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'}).format(t.deadlineAt);}
+        content.append(timer);
+      }
+      if(t.status!=='pending'){
+        const note=document.createElement('div');note.className='task-state';
+        note.textContent=(t.status==='done'?'✓ Выполнена':'✕ Не выполнена')+' · учтено '+signed(t.applied);
+        content.append(note);
+      }
+      const bottom=document.createElement('div');bottom.className='task-bottom';
+      const statuses=document.createElement('div');statuses.className='status-actions';
+      if(t.status==='pending'){
+        statuses.append(statusButton('✓ Готово','success',false,()=>openStatusConfirm(t,'done')));
+        statuses.append(statusButton('✕ Провал','fail',false,()=>openStatusConfirm(t,'failed')));
+      }else{
+        const final=document.createElement('span');final.className='final-tag';final.textContent=t.status==='done'?'✓ Готово · навсегда':'✕ Провал · навсегда';statuses.append(final);
+      }
+      const actions=document.createElement('div');actions.className='task-actions';
+      if(t.status==='pending')actions.append(taskAction('item-btn points-edit','Изменить стоимость E-баллов для '+t.name,icon.coin,'points',t));
+      actions.append(taskAction('item-btn','Редактировать '+t.name,icon.edit,'edit',t));
+      actions.append(taskAction('item-btn danger','Удалить '+t.name,icon.trash,'delete',t));
+      bottom.append(statuses,actions);content.append(bottom);el.append(content);
+      return el;
+    }
+    // Делегируем клики общему контейнеру: кнопки надёжно работают после каждого перерисовывания.
+    $('mainList').addEventListener('click',handleTaskAction);
+    $('extraList').addEventListener('click',handleTaskAction);
+    function handleTaskAction(e){
+      const button=e.target.closest('button[data-action]');
+      if(!button||!e.currentTarget.contains(button))return;
+      const t=tasks.find(x=>x.id===button.dataset.id);if(!t)return;
+      switch(button.dataset.action){
+        case 'edit':openEditGoal(t);break;
+        case 'delete':openDeleteGoal(t);break;
+        case 'points':openPoints(t);break;
+      }
+    }
+    function renderGroup(kind){
+      const all=tasks.filter(t=>t.kind===kind);
+      const visible=filtered(all).sort((a,b)=>{
+        if(kind==='extra'){const aStarter=a.name===STARTER_NAME,bStarter=b.name===STARTER_NAME;if(aStarter!==bStarter)return aStarter?-1:1;}
+        return {pending:0,done:1,failed:2}[a.status]-{pending:0,done:1,failed:2}[b.status]||b.createdAt-a.createdAt;
+      });
+      $(kind==='main'?'mainCount':'extraCount').textContent=all.length+' '+plural(all.length);
+      const list=$(kind==='main'?'mainList':'extraList');list.replaceChildren();
+      if(!visible.length){
+        const empty=document.createElement('div');empty.className='empty';
+        const strong=document.createElement('strong');strong.textContent=all.length?'Ничего не найдено':'Пока пусто';
+        const msg=document.createTextNode(all.length?'Попробуй переключить фильтр выше.':kind==='main'?'Добавь сюда важные задачи, которые точно нужно выполнить.':'Здесь место приятным и необязательным планам.');
+        empty.append(strong,msg);list.append(empty);return;
+      }
+      visible.forEach(t=>list.append(renderTask(t)));
+    }
+    function render(){
+      const main=tasks.filter(t=>t.kind==='main'),done=main.filter(t=>t.status==='done').length;
+      const pct=main.length?Math.round(done/main.length*100):0;
+      $('progressNum').textContent=done+' / '+main.length;
+      $('progressDetail').textContent=main.length?(pct===100?'Все важные цели выполнены 🎉':pct+'% основных целей выполнено'):'Добавь первую цель, чтобы начать';
+      $('progressBar').style.width=pct+'%';$('progress').setAttribute('aria-valuenow',String(pct));
+      $('walletBalance').textContent=(wallet.balance<0?'−'+fmt(-wallet.balance):fmt(wallet.balance))+' E';
+      $('walletBalance').classList.toggle('neg',wallet.balance<0);
+      $('walletEarned').textContent='+'+fmt(wallet.earned)+' E';$('walletSpent').textContent='−'+fmt(wallet.spent)+' E';
+      document.querySelectorAll('[data-filter]').forEach(btn=>btn.setAttribute('aria-selected',String(btn.dataset.filter===filter)));
+      renderGroup('main');renderGroup('extra');updateTimerLabels();renderShop();
+    }
+    function clearAddError(){
+      $('addError').hidden=true;
+      $('addError').textContent='';
+      $('newGoalName').removeAttribute('aria-invalid');
+      $('newGoalPoints').removeAttribute('aria-invalid');
+    }
+    function showAddError(message,field){
+      const error=$('addError');error.textContent=message;error.hidden=false;
+      field.setAttribute('aria-invalid','true');field.focus();
+      toast(message);
+    }
+    $('newGoalName').addEventListener('input',()=>{clearAddError();$('addSuccess').hidden=true;});
+    $('newGoalPoints').addEventListener('input',clearAddError);
+    function addGoal(){
+      clearAddError();
+      const input=$('newGoalName');
+      const name=input.value.trim();
+      if(!name){showAddError('Сначала напиши название цели',input);return;}
+      if(tasks.length>=MAX_TASKS){toast('Достигнут предел в 10 000 целей');return;}
+      const pointsInput=$('newGoalPoints');
+      const raw=Number(pointsInput.value);
+      if(!pointsInput.value.trim()||!Number.isSafeInteger(raw)||raw<1||raw>MAX_POINTS){
+        showAddError('Укажи стоимость задачи целым числом от 1 до 10 000 E',pointsInput);
+        return;
+      }
+      const kind=document.querySelector('input[name="kind"]:checked')?.value==='extra'?'extra':'main';
+      const timerDays=Number($('newGoalTimer').value);
+      if(!Number.isInteger(timerDays)||timerDays<0||timerDays>7){toast('Таймер: выбери от 1 до 7 дней или отключи');return;}
+      const now=Date.now();
+      const newTask={id:makeId(),name,kind,status:'pending',points:raw,applied:0,createdAt:now,timerDays,deadlineAt:timerDays?now+timerDays*DAY_MS:null,resolvedAt:null};
+      tasks.unshift(newTask);
+      filter='all';editingId=null;
+      const persisted=save();
+      // Сначала рендерим, затем прокручиваем страницу прямо к новой цели.
+      render();
+      const sectionName=kind==='main'?'«Основные»':'«Дополнительные»';
+      const msg=$('addSuccess');msg.hidden=false;msg.textContent='✓ Цель «'+name+'» добавлена в '+sectionName;
+      input.value='';
+      hasCustomPrice=false;
+      pointsInput.value=defaultPoints(kind);
+      $('newGoalTimer').value='0';
+      updatePointsUI(pointsInput,'newPointsChoices','newPointsPreview');
+      const goalElement=Array.from($(kind==='main'?'mainList':'extraList').children).find(el=>el.dataset.id===newTask.id);
+      if(goalElement){
+        goalElement.classList.add('just-added');
+        // Не возвращаем фокус в поле ввода: это отменяло бы прокрутку на мобильных.
+        goalElement.scrollIntoView({behavior:'smooth',block:'center'});
+      }
+      toast(persisted?'Цель в '+sectionName+' · '+fmt(raw)+' E':'Цель добавлена, но не сохранилась — проверь настройки браузера');
+    }
+    // Отдельный обработчик кнопки вместо неявной браузерной отправки формы.
+    $('addGoalBtn').addEventListener('click',addGoal);
+    $('newGoalForm').addEventListener('submit',e=>{e.preventDefault();addGoal();});
+    $('newGoalName').addEventListener('keydown',e=>{
+      if(e.key==='Enter'&&!e.isComposing){e.preventDefault();addGoal();}
+    });
+    document.querySelectorAll('input[name="kind"]').forEach(radio=>radio.addEventListener('change',()=>{
+      if(!hasCustomPrice){$('newGoalPoints').value=defaultPoints(radio.value);updatePointsUI($('newGoalPoints'),'newPointsChoices','newPointsPreview');}
+    }));
+    document.querySelectorAll('[data-filter]').forEach(btn=>btn.addEventListener('click',()=>{filter=btn.dataset.filter;editingId=null;render();}));
+
+    // Вкладки — две страницы одного приложения. Общий баланс и общее хранилище.
+    function setPage(page){
+      const isShop=page==='shop';
+      $('goalsPage').hidden=isShop;$('shopPage').hidden=!isShop;$('goalsHero').hidden=isShop;
+      $('goalsNav').setAttribute('aria-selected',String(!isShop));$('shopNav').setAttribute('aria-selected',String(isShop));
+      if(isShop)renderShop();
+    }
+    function pageFromHash(){return location.hash==='#shop'?'shop':'goals';}
+    $('goalsNav').addEventListener('click',()=>{setPage('goals');if(location.hash!=='#goals')location.hash='goals';window.scrollTo(0,0);});
+    $('shopNav').addEventListener('click',()=>{setPage('shop');if(location.hash!=='#shop')location.hash='shop';window.scrollTo(0,0);});
+    window.addEventListener('hashchange',()=>{setPage(pageFromHash());window.scrollTo(0,0);});
+    function validShopPrice(value){
+      if(typeof value==='string'&&!value.trim())return false;
+      const n=Number(value);return Number.isSafeInteger(n)&&n>=MIN_SHOP_PRICE&&n<=MAX_SHOP_PRICE;
+    }
+    const purchaseDateFormatter=new Intl.DateTimeFormat('ru-RU',{day:'2-digit',month:'2-digit',year:'numeric',hour:'2-digit',minute:'2-digit'});
+    function shopText(tag,cls,textValue){const e=document.createElement(tag);if(cls)e.className=cls;e.textContent=textValue;return e;}
+    function shopCountWord(n,single,few,many){const m=n%100,r=n%10;return n+' '+((m>=11&&m<=14)?many:r===1?single:r>=2&&r<=4?few:many);}
+    function refreshShopPricePreview(){
+      const input=$('shopNewPrice'),valid=validShopPrice(input.value),value=Number(input.value);
+      $('shopPricePreview').textContent=valid?fmt(value)+' E':'Минимум 500 E';
+      $('shopPriceChoices').querySelectorAll('[data-shop-price]').forEach(b=>b.setAttribute('aria-pressed',String(valid&&Number(b.dataset.shopPrice)===value)));
+    }
+    $('shopPriceChoices').addEventListener('click',e=>{
+      const b=e.target.closest('button[data-shop-price]');if(!b)return;
+      $('shopNewPrice').value=b.dataset.shopPrice;refreshShopPricePreview();$('shopAddError').hidden=true;
+    });
+    ['shopNewName','shopNewDesc','shopNewPrice'].forEach(id=>$(id).addEventListener('input',()=>{
+      $('shopAddError').hidden=true;
+      $('shopAddSuccess').hidden=true;
+      if(id==='shopNewPrice')refreshShopPricePreview();
+    }));
+    function shopFormError(message,el){
+      $('shopAddSuccess').hidden=true;
+      $('shopAddError').textContent=message;
+      $('shopAddError').hidden=false;
+      el?.focus();
+    }
+    // Отдельная кнопка создаёт товар напрямую; submit остаётся для Enter.
+    // Ни одно из двух событий не полагается на автоматическую валидацию браузера.
+    function addShopProduct(){
+      const name=$('shopNewName').value.trim();
+      const description=$('shopNewDesc').value.trim();
+      const raw=$('shopNewPrice').value;
+      if(!name){shopFormError('Напиши название товара, чтобы добавить его в корзину.',$('shopNewName'));return;}
+      if(!validShopPrice(raw)){
+        shopFormError('Цена товара — целое число от 500 до 999 999 999 E.',$('shopNewPrice'));return;
+      }
+      if(products.length>=MAX_PRODUCTS){shopFormError('В корзине максимум 500 товаров. Удали лишние товары.');return;}
+      const prod={id:makeId(),name:name.slice(0,160),description:description.slice(0,260),price:Number(raw),createdAt:Date.now()};
+      products.unshift(prod);
+      // Показать товар немедленно. В случае проблем с хранилищем оставляем его
+      // в текущей сессии и ясно сообщаем, что он может не пережить перезапуск.
+      try{
+        renderShop();
+      }catch(error){
+        console.error('Не удалось обновить корзину',error);
+        shopFormError('Ошибка отображения корзины. Попробуй обновить приложение, не очищая данные.');
+        return;
+      }
+      const persisted=save();
+      $('shopNewForm').reset();
+      $('shopNewPrice').value='500';
+      $('shopAddError').hidden=true;
+      refreshShopPricePreview();
+      const message='✓ «'+prod.name+'» добавлен в корзину за '+fmt(prod.price)+' E. Баланс не изменился.';
+      $('shopAddSuccess').textContent=persisted?message:message+' ⚠ Не удалось сохранить в браузере: после закрытия товар может исчезнуть.';
+      $('shopAddSuccess').hidden=false;
+      const added=Array.from($('shopProducts').children).find(el=>el.dataset.id===prod.id);
+      if(added){
+        added.classList.add('shop-cart-added');
+        added.scrollIntoView({behavior:'smooth',block:'center'});
+      }
+      toast(persisted?'Товар появился в корзине ✓':'Товар добавлен, но сохранение недоступно');
+    }
+    $('shopAddBtn').addEventListener('click',addShopProduct);
+    $('shopNewForm').addEventListener('submit',event=>{
+      event.preventDefault();
+      addShopProduct();
+    });
+    $('shopNewForm').addEventListener('keydown',event=>{
+      if(event.key==='Enter' && !event.isComposing && event.target.matches('input')){
+        event.preventDefault();
+        addShopProduct();
+      }
+    });
+    let shopEditId=null,shopDeleteId=null,shopBuyId=null;
+    function editShopItem(prod){
+      shopEditId=prod.id;
+      $('shopEditName').value=prod.name;
+      $('shopEditDesc').value=prod.description;
+      $('shopEditLockedPrice').textContent=fmt(prod.price)+' E';
+      $('shopEditError').hidden=true;
+      $('shopEditDialog').showModal();
+    }
+    $('shopEditCancel').addEventListener('click',()=>$('shopEditDialog').close());
+    $('shopEditForm').addEventListener('submit',e=>{
+      e.preventDefault();
+      const prod=products.find(p=>p.id===shopEditId);
+      if(!prod){$('shopEditDialog').close();return;}
+      const name=$('shopEditName').value.trim();
+      if(!name){
+        $('shopEditError').textContent='Укажи название товара.';
+        $('shopEditError').hidden=false;
+        $('shopEditName').focus();
+        return;
+      }
+      const old={...prod};
+      prod.name=name.slice(0,160);
+      prod.description=$('shopEditDesc').value.trim().slice(0,260);
+      // Ценник товара неизменен с момента добавления в корзину.
+      // Ни форма редактирования, ни её обработчик не обновляют prod.price.
+      if(!save()){Object.assign(prod,old);return;}
+      $('shopEditDialog').close();shopEditId=null;renderShop();toast('Название и описание обновлены. Цена без изменений.');
+    });
+    function deleteShopItem(prod){shopDeleteId=prod.id;$('shopDeleteName').textContent=prod.name;$('shopDeleteDialog').showModal();}
+    $('shopDeleteCancel').addEventListener('click',()=>$('shopDeleteDialog').close());
+    $('shopDeleteConfirm').addEventListener('click',()=>{
+      if(!shopDeleteId)return;const old=products;products=products.filter(p=>p.id!==shopDeleteId);
+      if(!save()){products=old;return;}
+      $('shopDeleteDialog').close();shopDeleteId=null;renderShop();toast('Товар удалён');
+    });
+    function buyShopItem(prod){
+      if(expireGoals())render();
+      if(wallet.balance<prod.price){toast('Не хватает '+fmt(prod.price-wallet.balance)+' E');return;}
+      shopBuyId=prod.id;$('shopBuyName').textContent=prod.name;$('shopBuyPrice').textContent='−'+fmt(prod.price)+' E';
+      $('shopBuyBalanceAfter').textContent='После покупки останется '+fmt(wallet.balance-prod.price)+' E. Покупку отменить нельзя.';
+      $('shopBuyDialog').showModal();
+    }
+    $('shopBuyCancel').addEventListener('click',()=>$('shopBuyDialog').close());
+    $('shopBuyConfirm').addEventListener('click',()=>{
+      if(!shopBuyId)return;
+      // Сроки целей обрабатываются перед покупкой — нельзя потратить уже списанные за просрочку E.
+      if(expireGoals())render();
+      const prod=products.find(p=>p.id===shopBuyId);
+      if(!prod){$('shopBuyDialog').close();shopBuyId=null;toast('Товар больше не существует');return;}
+      if(wallet.balance<prod.price){$('shopBuyDialog').close();shopBuyId=null;render();toast('Недостаточно E для покупки');return;}
+      const oldWallet={...wallet},oldHistory=history.slice(),oldPurchases=purchases.slice(),oldProducts=products.slice();
+      record({name:prod.name},-prod.price,'Покупка в магазине');
+      purchases.unshift({id:makeId(),name:prod.name,price:prod.price,at:Date.now()});
+      if(purchases.length>MAX_PURCHASES)purchases.length=MAX_PURCHASES;
+      products=products.filter(p=>p.id!==prod.id);
+      if(!save()){
+        wallet=oldWallet;history=oldHistory;purchases=oldPurchases;products=oldProducts;
+        $('shopBuyDialog').close();shopBuyId=null;render();toast('Покупка не состоялась: не удалось сохранить данные.');return;
+      }
+      $('shopBuyDialog').close();shopBuyId=null;render();toast('Куплено! −'+fmt(prod.price)+' E · товар перенесён в историю 🎉');
+    });
+    function renderShop(){
+      $('shopCount').textContent=shopCountWord(products.length,'товар','товара','товаров');
+      $('shopCartTotal').textContent=fmt(products.reduce((sum,p)=>sum+p.price,0))+' E';
+      $('shopPurchasesCount').textContent=shopCountWord(purchases.length,'покупка','покупки','покупок');
+      const list=$('shopProducts');list.replaceChildren();
+      if(!products.length){const e=shopText('div','shop-empty','');e.append(shopText('b','', 'Корзина пуста 🛒'),document.createTextNode('Добавь хотелку выше. Покупать её сразу не обязательно.'));list.append(e);}
+      for(const p of products){
+        const item=shopText('article','shop-item','');item.dataset.id=p.id;
+        const top=shopText('div','shop-item-top',''),nameBox=shopText('div','','');
+        nameBox.append(shopText('h4','shop-item-name',p.name));
+        if(p.description)nameBox.append(shopText('p','shop-item-desc',p.description));
+        nameBox.append(shopText('div','shop-item-created','В корзине · '+(Number.isFinite(p.createdAt)?createdDateFormatter.format(p.createdAt):'дата неизвестна')));
+        top.append(nameBox,shopText('span','shop-price',fmt(p.price)+' E'));
+        const bottom=shopText('div','shop-item-bottom','');
+        const buy=shopText('button','shop-redeem',wallet.balance>=p.price?'Купить за '+fmt(p.price)+' E':'Не хватает '+fmt(Math.max(0,p.price-wallet.balance))+' E');
+        buy.type='button';buy.disabled=wallet.balance<p.price;buy.addEventListener('click',()=>buyShopItem(p));
+        const buttons=shopText('div','shop-mini-actions','');
+        const edit=makeButton('','Изменить товар '+p.name,icon.edit,()=>editShopItem(p));
+        const del=makeButton('','Удалить товар '+p.name,icon.trash,()=>deleteShopItem(p));
+        buttons.append(edit,del);bottom.append(buy,buttons);item.append(top,bottom);list.append(item);
+      }
+      const purchaseList=$('shopPurchases');purchaseList.replaceChildren();
+      if(!purchases.length){purchaseList.append(shopText('div','shop-empty','Покупок пока нет. Накопи E и обменяй на первую награду.'));}
+      for(const p of purchases){
+        const row=shopText('div','shop-purchase',''),left=shopText('div','','');
+        left.append(shopText('strong','',p.name),shopText('small','',purchaseDateFormatter.format(p.at)));
+        row.append(left,shopText('span','shop-purchase-cost','−'+fmt(p.price)+' E'));purchaseList.append(row);
+      }
+    }
+    refreshShopPricePreview();
+    setPage(pageFromHash());
+    function renderHistory(){
+      const list=$('historyList');list.replaceChildren();
+      if(!history.length){const empty=document.createElement('div');empty.className='history-empty';empty.textContent='Операций пока нет. Отметь цель выполненной или невыполненной.';list.append(empty);return;}
+      history.forEach(h=>{
+        const row=document.createElement('div');row.className='history-entry';
+        const info=document.createElement('div');info.className='history-entry-info';
+        const title=document.createElement('div');title.className='history-entry-title';title.textContent=h.taskName;
+        const time=document.createElement('div');time.className='history-entry-time';time.textContent=h.action+' · '+new Intl.DateTimeFormat('ru-RU',{day:'2-digit',month:'2-digit',year:'numeric',hour:'2-digit',minute:'2-digit'}).format(h.at);
+        info.append(title,time);
+        const amount=document.createElement('div');amount.className='history-entry-amount '+(h.amount>=0?'pos':'neg');amount.textContent=signed(h.amount);
+        row.append(info,amount);list.append(row);
+      });
+    }
+    $('historyBtn').addEventListener('click',()=>{renderHistory();$('historyDialog').showModal();});
+    $('closeHistoryBtn').addEventListener('click',()=>$('historyDialog').close());
+    $('historyDialog').addEventListener('click',e=>{if(e.target===$('historyDialog'))$('historyDialog').close();});
+    let compact=false;try{compact=localStorage.getItem(MODE_KEY)==='1';}catch{}
+    function applyCompact(){app.classList.toggle('compact',compact);$('compactBtn').classList.toggle('active',compact);$('compactBtn').setAttribute('aria-pressed',String(compact));}
+    $('compactBtn').addEventListener('click',()=>{compact=!compact;try{localStorage.setItem(MODE_KEY,compact?'1':'0');}catch{}applyCompact();});applyCompact();
+    function closeMenu(){$('menu').open=false;}
+    $('exportBtn').addEventListener('click',()=>{
+      closeMenu();const data={app:'Target: Syrnik',version:6,exportedAt:new Date().toISOString(),tasks,wallet,history,starterRewardApplied,products,purchases};
+      const blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'}),url=URL.createObjectURL(blob);
+      const anchor=document.createElement('a');anchor.href=url;anchor.download='target-syrnik-'+new Date().toISOString().slice(0,10)+'.json';document.body.append(anchor);anchor.click();anchor.remove();setTimeout(()=>URL.revokeObjectURL(url),1000);toast('Резервная копия целей, магазина и E готова');
+    });
+    $('importBtn').addEventListener('click',()=>{closeMenu();$('importFile').value='';$('importFile').click();});
+    $('importFile').addEventListener('change',async e=>{
+      const f=e.target.files?.[0];if(!f)return;
+      if(f.size>3000000){toast('Файл слишком большой');return;}
+      try {
+        const data=JSON.parse(await f.text());const raw=Array.isArray(data)?data:data.tasks;
+        if(!Array.isArray(raw)||raw.length>MAX_TASKS)throw Error('wrong format');
+        const checked=raw.map(normalize).filter(Boolean);if(checked.length!==raw.length)throw Error('invalid tasks');
+        const importedWallet=data&&typeof data==='object'&&!Array.isArray(data)&&data.version>=2?cleanWallet(data.wallet):cleanWallet(null);
+        const importedHistory=data&&typeof data==='object'&&!Array.isArray(data)&&data.version>=2?cleanHistory(data.history):[];
+        const importedProducts=cleanProducts(data?.products);const importedPurchases=cleanPurchases(data?.purchases);
+        if(!confirm('Импорт заменит все цели, товары магазина, покупки и баланс '+fmt(wallet.balance)+' E. Продолжить?'))return;
+        tasks=checked.map(t=>({...t,id:makeId()}));wallet=importedWallet;history=importedHistory;products=importedProducts;purchases=importedPurchases;starterRewardApplied=true;editingId=null;filter='all';expireGoals();save();render();toast('Импортированы цели, товары, покупки и E-баллы');
+      } catch{toast('Неверный формат файла данных');}
+    });
+    $('clearDoneBtn').addEventListener('click',()=>{closeMenu();const n=tasks.filter(t=>t.status==='done').length;if(!n){toast('Выполненных целей нет');return;}if(confirm('Удалить '+n+' выполненных '+plural(n)+'? Начисленные баллы останутся.')){tasks=tasks.filter(t=>t.status!=='done');editingId=null;save();render();toast('Цели удалены, баланс сохранён');}});
+    $('clearAllBtn').addEventListener('click',()=>{closeMenu();if(!tasks.length){toast('Список уже пуст');return;}if(confirm('Удалить все цели? Баланс E-баллов и история останутся.')){tasks=[];editingId=null;save();render();toast('Список целей очищен');}});
+    window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();deferredInstall=e;$('installBtn').hidden=false;});
+    $('installBtn').addEventListener('click',async()=>{if(!deferredInstall)return;const event=deferredInstall;deferredInstall=null;$('installBtn').hidden=true;await event.prompt();});
+    window.addEventListener('appinstalled',()=>{$('installBtn').hidden=true;deferredInstall=null;toast('Target: Syrnik установлен!');});
+    if('serviceWorker' in navigator&&(location.protocol==='https:'||location.hostname==='localhost'||location.hostname==='127.0.0.1'))navigator.serviceWorker.register('./sw.js',{updateViaCache:'none'}).then(reg=>reg.update().catch(()=>{})).catch(()=>{});
+    expireGoals();
+    render();
+    setInterval(()=>{if(expireGoals())render();else updateTimerLabels();},15000);
+    window.addEventListener('focus',()=>{if(expireGoals())render();else updateTimerLabels();});
+    document.addEventListener('visibilitychange',()=>{if(!document.hidden){if(expireGoals())render();else updateTimerLabels();}});
+  })();
+  </script>
+</body>
+</html>
