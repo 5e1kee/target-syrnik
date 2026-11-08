@@ -1,8 +1,8 @@
 {
   "id": "./index.html",
-  "name": "Target: Syrnik 1.1(Beta)",
-  "short_name": "Syrnik Beta",
-  "description": "Цели, E-баллы и магазин наград с ценами от 500 E",
+  "name": "Target: Syrnik",
+  "short_name": "Syrnik",
+  "description": "Цели, ежедневный огонёк с бонусами E, таймеры и магазин наград.",
   "lang": "ru",
   "start_url": "./index.html",
   "scope": "./",

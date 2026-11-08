@@ -1,5 +1,5 @@
-// Target: Syrnik 1.1(Beta) — новая версия PWA (неизменяемая цена товара).
-const CACHE_NAME = 'target-syrnik-cart-v13';
+// Target: Syrnik — ежедневный огонёк с бонусами E и устойчивые таймеры.
+const CACHE_NAME = 'target-syrnik-cart-v15-streak-rewards';
 const FILES = ['./index.html', './manifest.webmanifest', './icons/icon-192.png', './icons/icon-512.png'];
 self.addEventListener('install', event => {
   event.waitUntil(caches.open(CACHE_NAME).then(cache => cache.addAll(FILES)).then(() => self.skipWaiting()));

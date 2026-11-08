@@ -7,11 +7,11 @@
   <meta name="description" content="Target: Syrnik — цели, E-баллы, таймеры и магазин наград.">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <meta name="apple-mobile-web-app-title" content="Target: Syrnik 1.1(Beta)">
+  <meta name="apple-mobile-web-app-title" content="Target: Syrnik">
   <link rel="manifest" href="./manifest.webmanifest">
   <link rel="icon" type="image/png" sizes="192x192" href="./icons/icon-192.png">
   <link rel="apple-touch-icon" href="./icons/icon-192.png">
-  <title>Target: Syrnik 1.1(Beta) — мои цели</title>
+  <title>Target: Syrnik — мои цели</title>
   <style>
     :root {
       color-scheme: dark;
@@ -30,7 +30,6 @@
     .shell{background:linear-gradient(160deg,rgba(20,28,46,.95),rgba(12,17,30,.97));border:1px solid rgba(189,196,236,.16);border-radius:30px;box-shadow:0 28px 90px rgba(0,0,0,.4),inset 0 1px 0 rgba(255,255,255,.04);overflow:hidden}
     .top{padding:26px 29px 0}.topline{display:flex;align-items:center;justify-content:space-between;gap:12px}.brand{display:flex;align-items:center;gap:13px}.brand-icon{width:43px;height:43px;display:grid;place-items:center;background:linear-gradient(135deg,#b7a4ff,#7d71f2);border-radius:14px;color:#17152b;box-shadow:0 7px 22px rgba(134,114,244,.22)}.eyebrow{font-size:10px;letter-spacing:2.7px;font-weight:800;color:var(--purple);line-height:1.25;margin-bottom:4px}.brand h1{font-size:22px;line-height:1.1;letter-spacing:-.65px;margin:0;font-weight:780}.header-actions{display:flex;gap:8px;align-items:center}.icon-btn{width:37px;height:37px;display:inline-grid;place-items:center;background:#20283b;color:#b2bdd4;border:1px solid var(--border);border-radius:12px;transition:background .2s,color .2s}.icon-btn:hover{background:#2d3650;color:#fff}.icon-btn.active{color:#c8bbff;background:#322a57;border-color:#54458e}
     .headline{font-size:25px;font-weight:770;letter-spacing:-.8px;margin:22px 0 20px}.headline em{font-style:normal;color:#b6a6ff}
-    .summary{display:flex;gap:14px;align-items:center;background:linear-gradient(113deg,rgba(112,91,200,.17),rgba(63,71,108,.15));border:1px solid rgba(159,136,251,.2);border-radius:20px;padding:17px 19px}.summary-icon{width:48px;height:48px;display:grid;place-items:center;border-radius:15px;background:#262345;color:#b6a7ff;flex:0 0 auto}.summary-main{flex:1;min-width:0}.summary-top{display:flex;justify-content:space-between;align-items:baseline;gap:5px}.summary-title{font-size:13px;font-weight:700}.summary-num{font-size:18px;font-weight:790;font-variant-numeric:tabular-nums}.summary-detail{font-size:11px;color:var(--muted);margin:4px 0 12px}.progress{height:7px;border-radius:100px;background:#2c334c;overflow:hidden}.progress-inner{width:0;height:100%;border-radius:inherit;background:linear-gradient(90deg,#9c84ff,#6ce1c0);transition:width .3s ease}
     .new-goal{margin:23px 29px 0;padding:17px;background:rgba(255,255,255,.025);border:1px solid var(--border);border-radius:19px}.small-heading{font-size:13px;font-weight:760;margin:0 0 12px;color:#d9def1}.add-row{display:flex;gap:9px}.goal-input{min-width:0;flex:1;background:#0c1424;color:#fff;border:1px solid #343b53;border-radius:12px;padding:12px 13px;outline:none;font-size:14px}.goal-input::placeholder{color:#67748e}.goal-input:focus{border-color:#9180e8;box-shadow:var(--ring)}.add-btn{border:0;background:linear-gradient(135deg,#aa91ff,#8673f1);color:#120f22;padding:0 16px;border-radius:12px;display:flex;align-items:center;gap:6px;font-size:13px;font-weight:800;white-space:nowrap}.add-btn:hover{filter:brightness(1.08)}
 .add-error{margin:9px 0 0;padding:8px 10px;border:1px solid rgba(255,138,152,.45);border-radius:10px;background:rgba(255,138,152,.08);font-size:12px;line-height:1.4;color:#ffc0c9}.goal-input[aria-invalid="true"],.points-custom input[aria-invalid="true"]{border-color:#ff8a98;box-shadow:0 0 0 2px rgba(255,138,152,.13)}
         .kind-controls{display:flex;gap:8px;margin-top:12px}.kind-option{flex:1;position:relative;cursor:pointer}.kind-option input{position:absolute;opacity:0;width:1px;height:1px}.kind-option span{display:flex;align-items:center;justify-content:center;gap:7px;padding:9px 8px;border:1px solid #30394f;border-radius:10px;font-size:12px;font-weight:650;color:#a8b1c6;transition:all .2s}.kind-option input:checked+span{background:rgba(147,123,246,.14);border-color:rgba(171,148,255,.65);color:#cabfff}.kind-option.optional input:checked+span{background:rgba(90,211,176,.08);border-color:rgba(90,211,176,.55);color:#8deacc}.kind-option input:focus-visible+span{box-shadow:var(--ring)}.mark{display:inline-block;width:7px;height:7px;border-radius:50%;background:currentColor}
@@ -42,7 +41,7 @@
     .edit-form{flex:1;min-width:0;display:flex;flex-direction:column;gap:8px}.edit-form input{width:100%;background:#0c1424;color:#f9f9ff;border:1px solid #7766c4;border-radius:9px;min-height:34px;padding:7px 9px;font-size:13px}.edit-bottom{display:flex;gap:6px;align-items:center;flex-wrap:wrap}.edit-bottom select{font-size:12px;min-height:30px;color:#d6d9ee;border:1px solid #38425b;background:#21293e;border-radius:8px;padding:4px 6px;max-width:170px}.edit-bottom button{border:1px solid #434b67;color:#c7cbe5;background:#263149;border-radius:8px;font-size:11px;min-height:30px;padding:5px 9px;font-weight:700}.edit-bottom .save{background:#9e88ff;color:#131026;border-color:#9e88ff}.edit-bottom .cancel{margin-left:0}
     .footer{padding:15px 29px 21px;border-top:1px solid rgba(196,207,243,.08);display:flex;justify-content:space-between;align-items:center;gap:12px;color:#72809a;font-size:11px}.footer p{margin:0}.footer strong{color:#abbbd7}.menu{position:relative}.menu summary{list-style:none;display:flex;align-items:center;gap:5px;cursor:pointer;color:#a7b4cc;padding:5px;border-radius:8px;font-weight:700}.menu summary::-webkit-details-marker{display:none}.menu[open] summary{color:#dedbff}.menu-pop{position:absolute;z-index:5;bottom:33px;right:0;min-width:185px;padding:6px;border-radius:12px;border:1px solid #3b4560;background:#20293e;box-shadow:0 17px 38px rgba(0,0,0,.38)}.menu-pop button{border:0;background:none;display:flex;align-items:center;gap:9px;color:#d2d9ee;font-size:12px;text-align:left;padding:10px;border-radius:8px;width:100%}.menu-pop button:hover{background:#343e59}.menu-pop button.danger{color:#ffa3af}
     .toast{position:fixed;z-index:20;bottom:22px;left:50%;transform:translateX(-50%) translateY(12px);font-size:13px;padding:11px 18px;border:1px solid #536084;border-radius:12px;color:#f7f7ff;background:#263047;box-shadow:0 12px 35px rgba(0,0,0,.4);opacity:0;pointer-events:none;transition:opacity .2s,transform .2s;white-space:nowrap;max-width:calc(100vw - 28px);text-overflow:ellipsis;overflow:hidden}.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}.sr-only{position:absolute!important;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
-    .compact .headline,.compact .summary-icon,.compact .summary-detail{display:none}.compact .top{padding-top:20px}.compact .summary{margin-top:18px;padding:12px 15px}.compact .new-goal{margin-top:15px}.compact .sections{padding-top:17px}.compact .tabs{margin-bottom:18px}.compact .group{margin-bottom:17px}.compact .task{min-height:47px;padding-block:6px}.compact .footer{padding-block:11px}
+    .compact .headline{display:none}.compact .top{padding-top:20px}.compact .new-goal{margin-top:15px}.compact .sections{padding-top:17px}.compact .tabs{margin-bottom:18px}.compact .group{margin-bottom:17px}.compact .task{min-height:47px;padding-block:6px}.compact .footer{padding-block:11px}
     @media(max-width:600px){body{padding:0;display:block;background:var(--base)}.app{max-width:none}.shell{min-height:100dvh;border:0;border-radius:0;box-shadow:none}.top{padding:24px 18px 0}.headline{font-size:24px}.new-goal{margin:21px 18px 0;padding:14px}.sections{padding:21px 18px 4px}.footer{padding:17px 18px 23px}.task{min-height:61px}.icon-btn{width:38px;height:38px}.compact .top{padding-top:18px}}
     @media(max-width:400px){.brand h1{font-size:19px}.topline{gap:6px}.header-actions{gap:5px}}
     @media(max-width:360px){.add-btn{padding:0 11px}.add-btn .add-label{display:none}.kind-option span{font-size:11px;padding-inline:4px}.brand{gap:8px}.brand h1{font-size:18px}.topline{gap:4px}.header-actions{gap:4px}}
@@ -69,7 +68,7 @@
     .compact .wallet{margin-top:12px;padding:12px 13px}.compact .wallet-symbol{width:36px;height:36px;font-size:20px}.compact .wallet-balance{font-size:23px}.compact .wallet-stats{margin-top:9px}.compact .points-frame{padding:10px}.compact .task-bottom{margin-top:6px}
     @media(max-width:430px){.wallet-balance{font-size:24px}.wallet-history{padding:8px;font-size:11px}.wallet{padding:13px}.task{padding:10px}.task-bottom{gap:4px}.status-btn{padding-inline:7px}.task-actions .item-btn{width:27px}.points-choices{gap:4px}.points-choice{padding-inline:0}.modal{padding:18px}}
     @media(max-width:350px){.task-price{font-size:9px;padding-inline:5px}.status-btn{font-size:10px;padding-inline:5px}.points-current{font-size:10px}.wallet-label{letter-spacing:1px}}
-    /* Target: Syrnik 1.1(Beta): отсчёт, окончательные статусы и надёжные диалоги */
+    /* Target: Syrnik: отсчёт, окончательные статусы и надёжные диалоги */
     .timer-frame{margin-top:12px;padding:14px;border:1px solid rgba(114,191,233,.27);border-radius:13px;background:linear-gradient(115deg,rgba(57,116,151,.12),rgba(37,54,83,.11))}
     .timer-frame-title{display:flex;align-items:center;gap:8px;color:#c7e5ff;margin-bottom:10px}
     .timer-frame-title h2{font-size:12px;font-weight:800;margin:0}.timer-optional{margin-left:auto;font-size:10px;color:#8ca7bd}
@@ -139,6 +138,25 @@
     .compact .shop-cart{padding:11px;margin-top:14px}.compact .shop-intro{padding-top:14px}.compact .shop-form{margin-top:12px;padding:12px}
     @media(max-width:600px){.shop-page{padding:0 18px 24px}.primary-nav{margin-top:18px}}
     @media(max-width:370px){.shop-cost-frame .points-choices{grid-template-columns:repeat(2,minmax(0,1fr))}.shop-item-top{flex-wrap:wrap}.shop-item-bottom{flex-wrap:wrap}.shop-redeem{flex:1}.shop-price-control input{width:118px}}
+    /* Ежедневная серия заходов */
+    .streak-card{margin:14px 0 0;padding:16px 17px 14px;border:1px solid rgba(251,164,95,.34);background:linear-gradient(120deg,rgba(132,58,51,.24),rgba(172,107,43,.12) 65%,rgba(77,59,70,.16));border-radius:19px;box-shadow:inset 0 1px 0 rgba(255,229,187,.04)}
+    .streak-header{display:flex;justify-content:space-between;align-items:center;gap:8px}
+    .streak-heading{display:flex;gap:9px;align-items:center;font-weight:850;font-size:13px;color:#ffdbb1}
+    .streak-flame{width:35px;height:35px;border-radius:11px;display:grid;place-items:center;font-size:22px;background:rgba(255,138,66,.13);border:1px solid rgba(255,159,76,.21)}
+    .streak-today{padding:6px 8px;border-radius:9px;font-size:10px;font-weight:800;background:rgba(255,185,108,.09);border:1px solid rgba(255,165,84,.2);color:#ffd7a4;text-align:right}
+    .streak-numbers{display:flex;align-items:baseline;gap:7px;margin:12px 0 4px}
+    .streak-count{font-size:32px;line-height:1;font-weight:900;color:#ffbc74;letter-spacing:-1px;font-variant-numeric:tabular-nums}
+    .streak-label{font-size:12px;font-weight:700;color:#f0cfb0}
+    .streak-record{margin-left:auto;font-size:10px;font-weight:650;color:#bd9b8b}
+    .streak-week{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:6px;margin-top:13px}
+    .streak-day{display:grid;place-items:center;gap:5px;min-width:0;color:#998c92;font-size:10px;font-weight:750}
+    .streak-dot{width:27px;height:27px;display:grid;place-items:center;border:1px solid #55424b;border-radius:10px;color:#736977;background:rgba(12,16,30,.25);font-size:13px}
+    .streak-day.visited{color:#ffdda9}.streak-day.visited .streak-dot{border-color:#ff9d62;background:linear-gradient(140deg,#a95537,#da8b43);color:#fff2db;box-shadow:0 3px 12px rgba(234,113,52,.16)}
+    .streak-day.today .streak-dot{box-shadow:0 0 0 2px rgba(255,189,114,.22)}
+    .streak-note{margin:10px 0 0;color:#c6a6a3;font-size:10px;line-height:1.5}
+    .task-deadline{font-size:10px;color:#8eacc9;margin-top:4px;font-variant-numeric:tabular-nums}
+    .compact .streak-card{padding:12px;margin-top:9px}.compact .streak-week{margin-top:8px}
+    @media(max-width:390px){.streak-card{padding:13px 12px}.streak-dot{width:24px;height:24px}.streak-week{gap:3px}.streak-today{font-size:9px}}
   </style>
 </head>
 <body>
@@ -148,7 +166,7 @@
         <div class="topline">
           <div class="brand">
             <div class="brand-icon" aria-hidden="true"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8.5"/><circle cx="12" cy="12" r="4.5"/><circle cx="12" cy="12" r=".8" fill="currentColor"/></svg></div>
-            <div><div class="eyebrow">1.1(Beta)</div><h1>Target: <span style="color:#ad9aff">Syrnik</span></h1></div>
+            <div><h1>Target: <span style="color:#ad9aff">Syrnik</span></h1></div>
           </div>
           <div class="header-actions">
             <button id="compactBtn" type="button" class="icon-btn" title="Компактный режим" aria-label="Переключить компактный режим" aria-pressed="false"><svg width="19" height="19" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M7 10h10M7 14h6"/></svg></button>
@@ -161,14 +179,19 @@
         </nav>
         <div id="goalsHero">
         <p class="headline">Маленький цели <em>на большие хотелки</em></p>
-        <div class="summary">
-          <div class="summary-icon" aria-hidden="true"><svg width="25" height="25" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 19V6l5-3 4 3 5-2v15l-5 2-4-3z"/><path d="M10 3v15m4-12v15"/></svg></div>
-          <div class="summary-main"><div class="summary-top"><span class="summary-title">Основные цели</span><span class="summary-num" id="progressNum">0 / 0</span></div><div class="summary-detail" id="progressDetail">Добавь первую цель, чтобы начать</div><div class="progress" role="progressbar" aria-label="Выполнение основных целей" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" id="progress"><div class="progress-inner" id="progressBar"></div></div></div>
-        </div>
         </div>
         <section class="wallet" aria-label="Кошелёк E-баллов">
           <div class="wallet-head"><div class="wallet-symbol" aria-hidden="true">E</div><div class="wallet-info"><div class="wallet-label">Баланс</div><div class="wallet-balance" id="walletBalance">0 E</div></div><button type="button" class="wallet-history" id="historyBtn">История</button></div>
           <div class="wallet-stats"><span class="wallet-stat">Получено <b id="walletEarned" class="pos">+0 E</b></span><span class="wallet-stat">Списано <b id="walletSpent" class="neg">−0 E</b></span></div>
+        </section>
+        <section class="streak-card" aria-label="Огонёк за ежедневные заходы">
+          <div class="streak-header">
+            <div class="streak-heading"><span class="streak-flame" aria-hidden="true">🔥</span><span>Огонёк</span></div>
+            <span class="streak-today" id="streakToday">Заход засчитан ✓</span>
+          </div>
+          <div class="streak-numbers"><strong id="streakCount" class="streak-count">1</strong><span class="streak-label" id="streakLabel">день подряд</span><span class="streak-record" id="streakRecord">Рекорд: 1</span></div>
+          <div id="streakWeek" class="streak-week" aria-label="Заходы за последние 7 дней"></div>
+          <p class="streak-note">🎁 Каждый день: <strong>+10 E</strong> · потеря серии: <strong>−100 E</strong> один раз за пропуск.</p>
         </section>
       </header>
       <section id="goalsPage" role="tabpanel" aria-labelledby="goalsNav">
@@ -196,7 +219,7 @@
             <option value="5">5 дней</option><option value="6">6 дней</option>
             <option value="7">7 дней (неделя)</option>
           </select>
-          <p class="timer-help">При выборе от 1 до 7 дней отсчёт начинается сразу. Если время выйдет, цель автоматически получит «Провал» и штраф −E, даже если приложение было закрыто.</p>
+          <p class="timer-help">Срок хранится как точная дата и продолжает идти при закрытом сайте. Если он истёк, при следующем запуске цель автоматически получит «Провал» и штраф −E.</p>
         </section>
       </form>
       <div class="sections"><div class="tabs" role="tablist" aria-label="Фильтр целей"><button class="tab" type="button" data-filter="all" role="tab" aria-selected="true">Все цели</button><button class="tab" type="button" data-filter="active" role="tab" aria-selected="false">В процессе</button><button class="tab" type="button" data-filter="done" role="tab" aria-selected="false">Выполнены</button><button class="tab" type="button" data-filter="failed" role="tab" aria-selected="false">Не выполнены</button></div>
@@ -241,7 +264,7 @@
         <div class="shop-section-header"><h3>История покупок</h3><small id="shopPurchasesCount">0 покупок</small></div>
         <div class="shop-purchases" id="shopPurchases"></div>
       </section>
-      <footer class="footer"><p>Target: Syrnik 1.1(Beta) · Удачи в накоплениях:)</p><details class="menu" id="menu"><summary>Настройки <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg></summary><div class="menu-pop"><button id="exportBtn" type="button">↓ Экспортировать все данные</button><button id="importBtn" type="button">↑ Импортировать все данные</button><button id="clearDoneBtn" type="button">✓ Удалить выполненные</button><button id="clearAllBtn" type="button" class="danger">✕ Очистить список</button></div></details><input type="file" id="importFile" accept=".json,application/json" class="sr-only" aria-label="Файл данных приложения"></footer>
+      <footer class="footer"><p>Target: Syrnik · Удачи в накоплениях:)</p><details class="menu" id="menu"><summary>Настройки <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg></summary><div class="menu-pop"><button id="exportBtn" type="button">↓ Экспортировать все данные</button><button id="importBtn" type="button">↑ Импортировать все данные</button><button id="clearDoneBtn" type="button">✓ Удалить выполненные</button><button id="clearAllBtn" type="button" class="danger">✕ Очистить список</button></div></details><input type="file" id="importFile" accept=".json,application/json" class="sr-only" aria-label="Файл данных приложения"></footer>
     </div>
   </main>
 
@@ -318,7 +341,7 @@
     <p class="shop-confirm-note" id="shopBuyBalanceAfter"></p><p class="shop-confirm-note">После покупки товар исчезнет из корзины и останется в истории покупок.</p>
     <div class="modal-actions"><button type="button" id="shopBuyCancel">Отмена</button><button class="primary" type="button" id="shopBuyConfirm">Обменять E</button></div>
   </dialog>
-  <dialog class="modal" id="historyDialog" aria-labelledby="historyTitle"><h2 id="historyTitle">История E-баллов</h2><p class="subtitle">Начисления за цели, штрафы и покупки в магазине. История остаётся после удаления задач и товаров.</p><div id="historyList" class="history-list"></div><div class="modal-actions"><button type="button" class="primary" id="closeHistoryBtn">Закрыть</button></div></dialog>
+  <dialog class="modal" id="historyDialog" aria-labelledby="historyTitle"><h2 id="historyTitle">История E-баллов</h2><p class="subtitle">Начисления за цели и ежедневные заходы, штрафы за потерю огонька и покупки. История сохраняется после удаления задач и товаров.</p><div id="historyList" class="history-list"></div><div class="modal-actions"><button type="button" class="primary" id="closeHistoryBtn">Закрыть</button></div></dialog>
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
   <script>
   (() => {
@@ -334,6 +357,11 @@
     const MAX_PRODUCTS = 500;
     const MAX_PURCHASES = 500;
     const DAY_MS = 24*60*60*1000;
+    const STREAK_HISTORY_LIMIT = 90;
+    const DAILY_VISIT_REWARD = 10;
+    const BROKEN_STREAK_PENALTY = 100;
+    const DAILY_VISIT_ACTION = 'Ежедневный заход · огонёк';
+    const BROKEN_STREAK_ACTION = 'Потеря огонька · пропуск дней';
     const STARTER_NAME = 'Вытерпеть(почти) буллинг от тупого задиры Леске';
     const PREVIOUS_STARTER_NAME = 'Вытерпеть буллинг от мейнера Рейны';
     const STARTER_ID = 'focus-starter-reyna-v3';
@@ -357,9 +385,13 @@
       const points=safePoints(item.points,defaultPoints(kind));
       const applied=Number.isSafeInteger(item.applied)&&Math.abs(item.applied)<=MAX_POINTS?item.applied:0;
       const timerDays=Number.isInteger(item.timerDays)&&item.timerDays>=1&&item.timerDays<=7?item.timerDays:0;
-      const deadlineAt=timerDays&&Number.isFinite(item.deadlineAt)&&item.deadlineAt>0?item.deadlineAt:null;
+      // Абсолютный момент истечения сохраняется между запусками, а не зависит от работы вкладки.
+      // Для старых целей без deadlineAt восстанавливаем срок из записанной даты создания.
+      const rawDeadline=typeof item.deadlineAt==='string'?Number(item.deadlineAt):item.deadlineAt;
+      const createdAt=Number.isFinite(item.createdAt)&&item.createdAt>0&&item.createdAt<=8640000000000000?item.createdAt:null;
+      const deadlineAt=timerDays?(Number.isFinite(rawDeadline)&&rawDeadline>0&&rawDeadline<=8640000000000000?rawDeadline:(createdAt==null?null:createdAt+timerDays*DAY_MS)):null;
       const resolvedAt=Number.isFinite(item.resolvedAt)&&item.resolvedAt>0?item.resolvedAt:null;
-      return {id:typeof item.id==='string'&&item.id.length<100?item.id:makeId(),name,kind,status,points,applied,createdAt:Number.isFinite(item.createdAt)&&item.createdAt>0&&item.createdAt<=8640000000000000?item.createdAt:null,timerDays,deadlineAt,resolvedAt};
+      return {id:typeof item.id==='string'&&item.id.length<100?item.id:makeId(),name,kind,status,points,applied,createdAt,timerDays,deadlineAt,resolvedAt};
     }
     function normalizeProduct(p){
       if(!p||typeof p!=='object'||typeof p.name!=='string')return null;
@@ -381,6 +413,22 @@
       if(!Array.isArray(raw))return [];
       return raw.slice(0,MAX_HISTORY).filter(h=>h&&typeof h==='object'&&typeof h.taskName==='string'&&Number.isSafeInteger(h.amount)&&Math.abs(h.amount)<=MAX_SHOP_PRICE).map(h=>({id:makeId(),taskName:h.taskName.slice(0,160),amount:h.amount,action:typeof h.action==='string'?h.action.slice(0,80):'Операция',at:Number.isFinite(h.at)?h.at:Date.now()}));
     }
+    // Считаем календарные дни по локальной дате (без ошибок при переводе часов).
+    function calendarDay(ts=Date.now()){
+      const d=new Date(ts);
+      return Math.floor(Date.UTC(d.getFullYear(),d.getMonth(),d.getDate())/DAY_MS);
+    }
+    function cleanStreak(raw){
+      const visited=Array.isArray(raw?.visited)?[...new Set(raw.visited.filter(n=>Number.isSafeInteger(n)&&n>=0&&n<200000))].sort((a,b)=>a-b).slice(-STREAK_HISTORY_LIMIT):[];
+      const lastDay=Number.isSafeInteger(raw?.lastDay)&&raw.lastDay>=0&&raw.lastDay<200000?raw.lastDay:null;
+      const current=Number.isSafeInteger(raw?.current)&&raw.current>0&&raw.current<100000?raw.current:0;
+      const best=Number.isSafeInteger(raw?.best)&&raw.best>=0&&raw.best<100000?raw.best:0;
+      // Новые поля позволяют не платить бонус повторно и не штрафовать дважды.
+      const safeDay = v => Number.isSafeInteger(v)&&v>=0&&v<200000?v:null;
+      return {lastDay,current,best:Math.max(current,best),visited,
+        lastRewardDay:safeDay(raw?.lastRewardDay),
+        lastPenaltyStreakDay:safeDay(raw?.lastPenaltyStreakDay)};
+    }
     // Если постоянное хранилище запрещено браузером, сохраняем хотя бы до закрытия вкладки.
     // Данные предыдущих версий продолжают использовать прежний ключ focus_goals_v2.
     function selectStorage(){
@@ -398,23 +446,75 @@
     function load(){
       try {
         const stored=storageAccess.storage?.getItem(STORAGE_KEY);
-        if(stored!==null){const d=JSON.parse(stored);if(!d||!Array.isArray(d.tasks))throw Error('invalid');return {tasks:d.tasks.slice(0,MAX_TASKS).map(normalize).filter(Boolean),wallet:cleanWallet(d.wallet),history:cleanHistory(d.history),starterRewardApplied:d.starterRewardApplied===true,products:cleanProducts(d.products),purchases:cleanPurchases(d.purchases)};}
+        if(stored!==null){const d=JSON.parse(stored);if(!d||!Array.isArray(d.tasks))throw Error('invalid');return {tasks:d.tasks.slice(0,MAX_TASKS).map(normalize).filter(Boolean),wallet:cleanWallet(d.wallet),history:cleanHistory(d.history),starterRewardApplied:d.starterRewardApplied===true,products:cleanProducts(d.products),purchases:cleanPurchases(d.purchases),streak:cleanStreak(d.streak)};}
         const legacy=JSON.parse(storageAccess.storage?.getItem(OLD_STORAGE_KEY)||'[]');
-        return {tasks:Array.isArray(legacy)?legacy.slice(0,MAX_TASKS).map(normalize).filter(Boolean):[],wallet:cleanWallet(null),history:[],starterRewardApplied:false,products:[],purchases:[]};
-      } catch{return {tasks:[],wallet:cleanWallet(null),history:[],starterRewardApplied:false,products:[],purchases:[]};}
+        return {tasks:Array.isArray(legacy)?legacy.slice(0,MAX_TASKS).map(normalize).filter(Boolean):[],wallet:cleanWallet(null),history:[],starterRewardApplied:false,products:[],purchases:[],streak:cleanStreak(null)};
+      } catch{return {tasks:[],wallet:cleanWallet(null),history:[],starterRewardApplied:false,products:[],purchases:[],streak:cleanStreak(null)};}
     }
-    const stored=load();let tasks=stored.tasks,wallet=stored.wallet,history=stored.history,starterRewardApplied=stored.starterRewardApplied,products=stored.products,purchases=stored.purchases;
+    const stored=load();let tasks=stored.tasks,wallet=stored.wallet,history=stored.history,starterRewardApplied=stored.starterRewardApplied,products=stored.products,purchases=stored.purchases,streak=stored.streak;
     let filter='all',editingId=null,deletingId=null,statusId=null,requestedStatus=null,pricingId=null,toastTimeout,deferredInstall=null,hasCustomPrice=false;
     function save(){
       try{
         if(!storageAccess.storage)throw Error('storage not available');
-        storageAccess.storage.setItem(STORAGE_KEY,JSON.stringify({version:6,tasks,wallet,history,starterRewardApplied,products,purchases}));
+        storageAccess.storage.setItem(STORAGE_KEY,JSON.stringify({version:8,tasks,wallet,history,starterRewardApplied,products,purchases,streak}));
         if(storageAccess.type==='sessionStorage'&&!warnedAboutStorage){warnedAboutStorage=true;toast('Сохранено на время сессии. Для постоянного хранения разреши данные сайтов.');}
         return true;
       }catch{
         if(!warnedAboutStorage){warnedAboutStorage=true;toast('Нет доступа к памяти браузера. Изменения могут исчезнуть после закрытия.');}
         return false;
       }
+    }
+    function streakWord(n){const m=n%100;if(m>=11&&m<=14)return 'дней подряд';return n%10===1?'день подряд':n%10>=2&&n%10<=4?'дня подряд':'дней подряд';}
+    function renderStreak(){
+      const today=calendarDay();
+      const live=streak.lastDay===today||streak.lastDay===today-1?streak.current:0;
+      $('streakCount').textContent=String(live);
+      $('streakLabel').textContent=streakWord(live);
+      $('streakRecord').textContent='Рекорд: '+streak.best;
+      $('streakToday').textContent=streak.lastDay===today?'Сегодня засчитан ✓':'Заход ещё не засчитан';
+      const week=$('streakWeek');week.replaceChildren();
+      const days=['Вс','Пн','Вт','Ср','Чт','Пт','Сб'];
+      for(let offset=6;offset>=0;offset--){
+        const day=today-offset,dayDate=new Date(day*DAY_MS),visited=streak.visited.includes(day);
+        const wrap=document.createElement('div');wrap.className='streak-day'+(visited?' visited':'')+(day===today?' today':'');
+        wrap.title=dayDate.toLocaleDateString('ru-RU')+(visited?' · заход был':' · без захода');
+        const dot=document.createElement('span');dot.className='streak-dot';dot.textContent=visited?'🔥':'·';
+        const label=document.createElement('span');label.textContent=days[dayDate.getUTCDay()];
+        wrap.append(dot,label);week.append(wrap);
+      }
+    }
+    // Каждый новый календарный день: +10 E за заход. После пропуска одного или
+    // нескольких дней штрафуем -100 E ОДИН РАЗ за потерянную серию.
+    // Если версия со старым «Огоньком» уже отметила сегодня заход, награда
+    // начисляется при первом открытии обновлённой версии.
+    function registerDailyVisit(){
+      const today=calendarDay();
+      if(streak.lastDay!==null&&today<streak.lastDay){renderStreak();return false;} // перевод часов назад
+      let changed=false,bonus=false,penalty=false;
+      if(streak.lastDay!==null && today>streak.lastDay+1 && streak.lastPenaltyStreakDay!==streak.lastDay){
+        record({name:'🔥 Огонёк'},-BROKEN_STREAK_PENALTY,BROKEN_STREAK_ACTION);
+        streak.lastPenaltyStreakDay=streak.lastDay;
+        changed=true;penalty=true;
+      }
+      if(streak.lastDay!==today){
+        streak.current=streak.lastDay===today-1?streak.current+1:1;
+        streak.lastDay=today;
+        streak.best=Math.max(streak.best,streak.current);
+        if(!streak.visited.includes(today))streak.visited.push(today);
+        streak.visited=streak.visited.filter(d=>d>=today-STREAK_HISTORY_LIMIT).slice(-STREAK_HISTORY_LIMIT);
+        changed=true;
+      }
+      if(streak.lastRewardDay!==today){
+        // Дополнительная защита при импорте сохранений без поля lastRewardDay.
+        const alreadyPaid=history.some(h=>h.action===DAILY_VISIT_ACTION&&calendarDay(h.at)===today);
+        if(!alreadyPaid){record({name:'🔥 Огонёк'},DAILY_VISIT_REWARD,DAILY_VISIT_ACTION);bonus=true;}
+        streak.lastRewardDay=today;changed=true;
+      }
+      if(changed)save();
+      renderStreak();
+      if(penalty)toast('Огонёк потерян: −100 E. За сегодняшний заход +10 E');
+      else if(bonus)toast('🔥 Ежедневный бонус: +10 E');
+      return changed;
     }
     function toast(message){const el=$('toast');el.textContent=message;el.classList.add('show');clearTimeout(toastTimeout);toastTimeout=setTimeout(()=>el.classList.remove('show'),2900);}
     function fmt(n){return new Intl.NumberFormat('ru-RU').format(n);}
@@ -470,6 +570,7 @@
     }
     renameExistingStarter();
     ensureStarterGoal();
+    registerDailyVisit();
     // Окончательный выбор: завершённая цель никогда не возвращается в ожидание.
     function setStatus(t,next){
       if(t.status!=='pending'||(next!=='done'&&next!=='failed'))return;
@@ -490,9 +591,9 @@
       if(changed)save();return changed;
     }
     function prettyRemaining(ms){
-      const minutes=Math.max(0,Math.ceil(ms/60000));
-      const d=Math.floor(minutes/1440),h=Math.floor(minutes%1440/60),m=minutes%60;
-      return (d?d+' д ':'')+(h?h+' ч ':'')+(m||(!d&&!h)?m+' мин':'').trim();
+      const seconds=Math.max(0,Math.ceil(ms/1000));
+      const d=Math.floor(seconds/86400),h=Math.floor(seconds%86400/3600),m=Math.floor(seconds%3600/60),s=seconds%60;
+      return (d?d+' д ':'')+(h?h+' ч ':'')+(m?m+' мин ':'')+s+' сек';
     }
     function updateTimerLabels(){
       document.querySelectorAll('.task-timer[data-deadline]').forEach(label=>{
@@ -615,10 +716,16 @@
       created.textContent=t.createdAt==null?'Добавлена: дата неизвестна':'Добавлена: '+formatCreatedAt(t.createdAt);
       content.append(created);
       if(t.deadlineAt!=null){
+        const dateText=createdDateFormatter.format(t.deadlineAt);
         const timer=document.createElement('div');timer.className='task-timer';
-        if(t.status==='pending')timer.dataset.deadline=String(t.deadlineAt);
-        else{timer.classList.add('completed');timer.textContent='⏱ Срок: '+new Intl.DateTimeFormat('ru-RU',{day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'}).format(t.deadlineAt);}
+        if(t.status==='pending'){
+          timer.dataset.deadline=String(t.deadlineAt);
+          timer.title='Дедлайн: '+dateText;
+        }else{timer.classList.add('completed');timer.textContent='⏱ Срок был: '+dateText;}
         content.append(timer);
+        if(t.status==='pending'){
+          const due=document.createElement('div');due.className='task-deadline';due.textContent='Дедлайн: '+dateText;content.append(due);
+        }
       }
       if(t.status!=='pending'){
         const note=document.createElement('div');note.className='task-state';
@@ -670,11 +777,6 @@
       visible.forEach(t=>list.append(renderTask(t)));
     }
     function render(){
-      const main=tasks.filter(t=>t.kind==='main'),done=main.filter(t=>t.status==='done').length;
-      const pct=main.length?Math.round(done/main.length*100):0;
-      $('progressNum').textContent=done+' / '+main.length;
-      $('progressDetail').textContent=main.length?(pct===100?'Все важные цели выполнены 🎉':pct+'% основных целей выполнено'):'Добавь первую цель, чтобы начать';
-      $('progressBar').style.width=pct+'%';$('progress').setAttribute('aria-valuenow',String(pct));
       $('walletBalance').textContent=(wallet.balance<0?'−'+fmt(-wallet.balance):fmt(wallet.balance))+' E';
       $('walletBalance').classList.toggle('neg',wallet.balance<0);
       $('walletEarned').textContent='+'+fmt(wallet.earned)+' E';$('walletSpent').textContent='−'+fmt(wallet.spent)+' E';
@@ -942,7 +1044,7 @@
     $('compactBtn').addEventListener('click',()=>{compact=!compact;try{localStorage.setItem(MODE_KEY,compact?'1':'0');}catch{}applyCompact();});applyCompact();
     function closeMenu(){$('menu').open=false;}
     $('exportBtn').addEventListener('click',()=>{
-      closeMenu();const data={app:'Target: Syrnik',version:6,exportedAt:new Date().toISOString(),tasks,wallet,history,starterRewardApplied,products,purchases};
+      closeMenu();const data={app:'Target: Syrnik',version:8,exportedAt:new Date().toISOString(),tasks,wallet,history,starterRewardApplied,products,purchases,streak};
       const blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'}),url=URL.createObjectURL(blob);
       const anchor=document.createElement('a');anchor.href=url;anchor.download='target-syrnik-'+new Date().toISOString().slice(0,10)+'.json';document.body.append(anchor);anchor.click();anchor.remove();setTimeout(()=>URL.revokeObjectURL(url),1000);toast('Резервная копия целей, магазина и E готова');
     });
@@ -957,8 +1059,9 @@
         const importedWallet=data&&typeof data==='object'&&!Array.isArray(data)&&data.version>=2?cleanWallet(data.wallet):cleanWallet(null);
         const importedHistory=data&&typeof data==='object'&&!Array.isArray(data)&&data.version>=2?cleanHistory(data.history):[];
         const importedProducts=cleanProducts(data?.products);const importedPurchases=cleanPurchases(data?.purchases);
+        const importedStreak=cleanStreak(data?.streak);
         if(!confirm('Импорт заменит все цели, товары магазина, покупки и баланс '+fmt(wallet.balance)+' E. Продолжить?'))return;
-        tasks=checked.map(t=>({...t,id:makeId()}));wallet=importedWallet;history=importedHistory;products=importedProducts;purchases=importedPurchases;starterRewardApplied=true;editingId=null;filter='all';expireGoals();save();render();toast('Импортированы цели, товары, покупки и E-баллы');
+        tasks=checked.map(t=>({...t,id:makeId()}));wallet=importedWallet;history=importedHistory;products=importedProducts;purchases=importedPurchases;streak=importedStreak;starterRewardApplied=true;editingId=null;filter='all';expireGoals();registerDailyVisit();save();render();toast('Импортированы цели, товары, покупки, огонёк и E-баллы');
       } catch{toast('Неверный формат файла данных');}
     });
     $('clearDoneBtn').addEventListener('click',()=>{closeMenu();const n=tasks.filter(t=>t.status==='done').length;if(!n){toast('Выполненных целей нет');return;}if(confirm('Удалить '+n+' выполненных '+plural(n)+'? Начисленные баллы останутся.')){tasks=tasks.filter(t=>t.status!=='done');editingId=null;save();render();toast('Цели удалены, баланс сохранён');}});
@@ -967,11 +1070,26 @@
     $('installBtn').addEventListener('click',async()=>{if(!deferredInstall)return;const event=deferredInstall;deferredInstall=null;$('installBtn').hidden=true;await event.prompt();});
     window.addEventListener('appinstalled',()=>{$('installBtn').hidden=true;deferredInstall=null;toast('Target: Syrnik установлен!');});
     if('serviceWorker' in navigator&&(location.protocol==='https:'||location.hostname==='localhost'||location.hostname==='127.0.0.1'))navigator.serviceWorker.register('./sw.js',{updateViaCache:'none'}).then(reg=>reg.update().catch(()=>{})).catch(()=>{});
+    // Проверяем истёкшие дедлайны ДО первой отрисовки: даже если сайт был закрыт несколько дней.
     expireGoals();
     render();
-    setInterval(()=>{if(expireGoals())render();else updateTimerLabels();},15000);
-    window.addEventListener('focus',()=>{if(expireGoals())render();else updateTimerLabels();});
-    document.addEventListener('visibilitychange',()=>{if(!document.hidden){if(expireGoals())render();else updateTimerLabels();}});
+    function refreshAfterReturn(){
+      const visitChanged=registerDailyVisit();
+      const goalsChanged=expireGoals();
+      if(visitChanged||goalsChanged)render();else updateTimerLabels();
+    }
+    // Интервал нужен лишь для отображения секунд; срок отсчитывается от сохранённой даты.
+    // При закрытом браузере JS не выполняется. Пропущенные сроки обрабатываются при возвращении.
+    let lastObservedDay=calendarDay();
+    setInterval(()=>{
+      if(document.hidden)return;
+      const today=calendarDay();
+      if(today!==lastObservedDay){lastObservedDay=today;refreshAfterReturn();return;}
+      if(expireGoals())render();else updateTimerLabels();
+    },1000);
+    window.addEventListener('focus',refreshAfterReturn);
+    window.addEventListener('pageshow',refreshAfterReturn); // в том числе возврат из back-forward cache
+    document.addEventListener('visibilitychange',()=>{if(!document.hidden)refreshAfterReturn();});
   })();
   </script>
 </body>
